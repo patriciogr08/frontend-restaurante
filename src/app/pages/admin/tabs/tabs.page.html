@@ -1,0 +1,41 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Panel Admin</ion-title>
+        <ion-buttons slot="end">
+        <ion-button (click)="doLogout()">Cerrar Sesión</ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-tabs>
+        <ion-router-outlet></ion-router-outlet>
+
+        <ion-tab-bar slot="bottom">
+            <ion-tab-button [routerLink]="['/admin/tabs/dashboard']">
+                <ion-icon name="speedometer-outline"></ion-icon>
+                <ion-label>Dashboard</ion-label>
+            </ion-tab-button>
+
+            <ion-tab-button [routerLink]="['/admin/tabs/pedidos']">
+                <ion-icon name="list-outline"></ion-icon>
+                <ion-label>Pedidos</ion-label>
+            </ion-tab-button>
+
+            <ion-tab-button [routerLink]="['/admin/tabs/productos']">
+                <ion-icon name="pricetags-outline"></ion-icon>
+                <ion-label>Productos</ion-label>
+            </ion-tab-button>
+
+            <ion-tab-button [routerLink]="['/admin/tabs/usuarios']">
+                <ion-icon name="people-outline"></ion-icon>
+                <ion-label>Usuarios</ion-label>
+            </ion-tab-button>
+
+            <ion-tab-button [routerLink]="['/admin/tabs/perfil']">
+                <ion-icon name="person-circle-outline"></ion-icon>
+                <ion-label>Perfil</ion-label>
+            </ion-tab-button>
+        </ion-tab-bar>
+    </ion-tabs>
+</ion-content>

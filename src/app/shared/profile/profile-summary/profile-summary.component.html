@@ -1,0 +1,8 @@
+<div class="chip">
+    @if (avatarUrl) {
+        <img [src]="avatarUrl" alt="avatar">
+    } @else {
+        <div class="stub">{{ initials }}</div>
+    }
+    <span>{{ nombre || usuario }}</span>
+</div>

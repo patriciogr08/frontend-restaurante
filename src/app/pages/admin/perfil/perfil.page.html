@@ -1,0 +1,56 @@
+<ion-content class="ion-padding perfil">
+    @if (loading()) {
+        <div class="center">
+        <div class="spinner"></div>
+        <p>Cargando perfil…</p>
+        </div>
+    } @else if (me()) {
+        <section class="header">
+        <app-profile-card
+            [usuario]="me()!.usuario"
+            [nombre]="me()!.nombre"
+            [rol]="me()!.rol"
+            [avatarUrl]="me()!.avatarUrl" />
+
+        <div class="actions">
+            <ion-button size="small" fill="outline" (click)="reload()">Recargar</ion-button>
+            <ion-button size="small" color="medium" (click)="logout()">Cerrar sesión</ion-button>
+        </div>
+        </section>
+
+        <section class="body">
+        <div class="left">
+            <h3>Datos del perfil</h3>
+            <app-profile-form
+            [values]="{ nombre: me()!.nombre, telefono: me()!.telefono, email: me()!.email }"
+            (save)="onSave($event)">
+            </app-profile-form>
+            @if (saving()) {
+            <div class="saving">Guardando…</div>
+            }
+        </div>
+
+        <div class="right">
+            <h3>Foto</h3>
+            <app-avatar-uploader
+            [avatarUrl]="me()!.avatarUrl"
+            (fileChange)="onAvatar($event)">
+            </app-avatar-uploader>
+            @if (uploading()) {
+            <div class="saving">Subiendo…</div>
+            }
+
+            <h3 class="mt">Cambiar contraseña</h3>
+            <app-change-password-form (changePass)="onChangePass($event)"></app-change-password-form>
+            @if (changing()) {
+            <div class="saving">Procesando…</div>
+            }
+        </div>
+        </section>
+    } @else {
+        <div class="center">
+        <p>No se encontró el perfil.</p>
+        <ion-button size="small" (click)="reload()">Reintentar</ion-button>
+        </div>
+    }
+</ion-content>

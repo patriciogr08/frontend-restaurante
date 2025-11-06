@@ -1,0 +1,11 @@
+<div class="card">
+    @if (avatarUrl) {
+        <img [src]="avatarUrl" alt="avatar">
+    } @else {
+        <div class="stub">{{ initials }}</div>
+    }
+    <div class="info">
+        <h3>{{ nombre || usuario }}</h3>
+        @if (rol) { <small>{{ rol }}</small> }
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <label class="lbl">Nombre</label>
+    <ion-item class="input" fill="solid" lines="none">
+        <ion-input formControlName="nombre" type="text" placeholder="Tu nombre"></ion-input>
+    </ion-item>
+    @if (has('nombre','required'))   { <div class="error">El nombre es obligatorio.</div> }
+    @if (has('nombre','minlength'))  { <div class="error">Mínimo 2 caracteres.</div> }
+
+    <label class="lbl">Teléfono</label>
+    <ion-item class="input" fill="solid" lines="none">
+        <ion-input formControlName="telefono" type="tel" placeholder="+593 ..."></ion-input>
+    </ion-item>
+
+    <label class="lbl">Email</label>
+    <ion-item class="input" fill="solid" lines="none">
+        <ion-input formControlName="email" type="email" placeholder="tucorreo@dominio.com"></ion-input>
+    </ion-item>
+    @if (has('email','email')) { <div class="error">Email no válido.</div> }
+
+    <ion-button class="btn" expand="block" shape="round" type="submit">Guardar cambios</ion-button>
+</form>

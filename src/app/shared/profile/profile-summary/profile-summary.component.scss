@@ -1,0 +1,10 @@
+.chip {
+  display:flex; align-items:center; gap:8px;
+  padding:6px 10px; border-radius:999px; background:#f1f5f9; color:#0f172a;
+}
+img, .stub {
+  width: 24px; height: 24px; border-radius: 50%;
+  object-fit: cover; background:#e2e8f0; display:grid; place-items:center;
+  font-size:12px; font-weight:700; color:#475569;
+}
+:host-context(.dark) { .chip { background:#1f2937; color:#e5e7eb; } }

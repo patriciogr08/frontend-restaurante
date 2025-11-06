@@ -1,0 +1,14 @@
+<!-- src/app/pages/admin/pedidos/pedidos.page.html -->
+<ion-content class="ion-padding">
+    <h2>Pedidos</h2>
+
+    <!-- Bind 100% reactivo -->
+    <ion-segment [value]="estadoCtrl.value" (ionChange)="onSegmentChange($event)">
+        <ion-segment-button value="en_proceso"><ion-label>En proceso</ion-label></ion-segment-button>
+        <ion-segment-button value="despachados"><ion-label>Despachados</ion-label></ion-segment-button>
+        <ion-segment-button value="cobrados"><ion-label>Cobrados</ion-label></ion-segment-button>
+        <ion-segment-button value="cancelados"><ion-label>Cancelados</ion-label></ion-segment-button>
+    </ion-segment>
+
+    <p>(Listado por estado — por implementar)</p>
+</ion-content>

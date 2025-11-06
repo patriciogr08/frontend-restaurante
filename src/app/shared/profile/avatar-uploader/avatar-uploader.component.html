@@ -1,0 +1,16 @@
+<div class="avatar-wrap">
+    @if (preview) {
+        <img [src]="preview" alt="preview">
+    } @else if (avatarUrl) {
+        <img [src]="avatarUrl" alt="avatar">
+    } @else {
+        <div class="stub">IMG</div>
+    }
+
+    <div class="actions">
+        <label class="btn">
+        <input type="file" accept="image/*" (change)="onFile($event)" hidden>
+        Cambiar foto
+        </label>
+    </div>
+</div>

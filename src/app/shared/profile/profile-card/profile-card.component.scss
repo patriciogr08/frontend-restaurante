@@ -1,0 +1,8 @@
+.card { display:flex; align-items:center; gap:12px; }
+img, .stub {
+    width: 56px; height: 56px; border-radius: 50%;
+    object-fit: cover; background:#f3f4f6; display:grid; place-items:center;
+}
+.stub { font-weight:700; color:#64748b; }
+.info h3 { margin:0; font-weight:700; }
+.info small { color:#64748b; }

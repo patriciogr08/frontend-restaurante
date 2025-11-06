@@ -1,0 +1,11 @@
+.avatar-wrap { display:flex; align-items:center; gap:14px; }
+img, .stub {
+  width: 84px; height: 84px; border-radius: 50%;
+  object-fit: cover; background:#f3f4f6; display:grid; place-items:center;
+}
+.stub { color:#64748b; font-weight:700; }
+.actions .btn {
+  display:inline-block; padding:8px 12px; border-radius:10px;
+  background:#111827; color:#fff; cursor:pointer;
+}
+:host-context(.dark) { .actions .btn { background:#2563eb; } }
