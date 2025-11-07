@@ -2,15 +2,16 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonContent, IonButton, ToastController } from '@ionic/angular/standalone';
 
-import { ProfileService } from '../../../shared/profile/profile.service';
-import { Profile, UpdateProfileDto, ChangePasswordDto } from '../../../shared/profile/profile.models';
-import { AuthService } from '../../../core/services/auth.service';
+import { ProfileService } from '../profile/profile.service';
+import { Profile, UpdateProfileDto, ChangePasswordDto } from '../profile/profile.models';
+import { AuthService } from '../../core/services/auth.service';
 
 // Shared components
-import { ProfileCardComponent } from '../../../shared/profile/profile-card/profile-card.component';
-import { ProfileFormComponent } from '../../../shared/profile/profile-form/profile-form.component';
-import { ChangePasswordFormComponent } from '../../../shared/profile/change-password-form/change-password-form.component';
-import { AvatarUploaderComponent } from '../../../shared/profile/avatar-uploader/avatar-uploader.component';
+import { ProfileCardComponent } from '../profile/profile-card/profile-card.component';
+import { ProfileFormComponent } from '../profile/profile-form/profile-form.component';
+import { ChangePasswordFormComponent } from '../profile/change-password-form/change-password-form.component';
+import { AvatarUploaderComponent } from '../profile/avatar-uploader/avatar-uploader.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
     standalone: true,
@@ -40,7 +41,10 @@ export class PerfilPage {
     reload() {
         this.loading.set(true);
         this.svc.me().subscribe({
-        next: (p) => { this.me.set(p); this.loading.set(false); },
+        next: (p) => { 
+            this.me.set({ ...p, avatarUrl: absolutize(p.avatarUrl) ?? ''});            
+            this.loading.set(false); 
+        },
         error: async (e) => {
             this.loading.set(false);
             const t = await this.toast.create({ message: 'No se pudo cargar el perfil', duration: 2200, color: 'danger' });
@@ -84,6 +88,8 @@ export class PerfilPage {
     }
 
     async onAvatar(file: File) {
+        if (!file) return;
+        console.log('-> subiendo', file.name, file.type, file.size);
         this.uploading.set(true);
         this.svc.uploadAvatar(file).subscribe({
         next: async (p) => {
@@ -103,4 +109,13 @@ export class PerfilPage {
     logout() {
         this.auth.logout();
     }
+}
+
+function absolutize(u?: string | null) {
+    if (!u) return u ?? null;
+    if (/^https?:\/\//i.test(u)) return u; // ya es absoluta
+    const base = environment.apiBaseUrl.replace(/\/+$/,''); // ej: http://localhost:3200/api
+    // si apiBaseUrl termina en /api y tus archivos salen en /images, quita el /api:
+    const origin = base.replace(/\/api$/,'');               // -> http://localhost:3200
+    return `${origin}${u.startsWith('/') ? '' : '/'}${u}`;
 }

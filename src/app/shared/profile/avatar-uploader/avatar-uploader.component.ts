@@ -5,7 +5,7 @@ import { IonButton } from '@ionic/angular/standalone';
 @Component({
   standalone: true,
   selector: 'app-avatar-uploader',
-  imports: [CommonModule, IonButton],
+  imports: [CommonModule],
   templateUrl: './avatar-uploader.component.html',
   styleUrls: ['./avatar-uploader.component.scss']
 })

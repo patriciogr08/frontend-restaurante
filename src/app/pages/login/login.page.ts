@@ -54,17 +54,23 @@ export class LoginPage {
 
         this.auth.login(this.form.value as any).subscribe({
             next: async (resp) => {
-            this.auth.setSession(resp);
-            await loader.dismiss();
-            this.router.navigateByUrl('/admin/tabs', { replaceUrl: true });
+                this.auth.setSession(resp);
+                await loader.dismiss();
+                const role = resp.user?.rol ?? this.auth.role;
+                const target =
+                    role === 'ADMIN'       ? '/admin/tabs' :
+                    role === 'MESERO'      ? '/mesero'     :
+                    role === 'DESPACHADOR' ? '/despacho'   : '/';
+
+                this.router.navigateByUrl(target, { replaceUrl: true });
             },
             error: async (err) => {
-            await loader.dismiss();
-            const t = await this.toast.create({
-                message: err?.error?.message || 'Usuario o contraseña inválidos',
-                duration: 2500, color: 'danger'
-            });
-            t.present();
+                await loader.dismiss();
+                const t = await this.toast.create({
+                    message: err?.error?.message || 'Usuario o contraseña inválidos',
+                    duration: 2500, color: 'danger'
+                });
+                t.present();
             }
         });
     }

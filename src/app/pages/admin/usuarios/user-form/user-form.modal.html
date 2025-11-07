@@ -1,0 +1,54 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>{{ mode === 'create' ? 'Nuevo usuario' : 'Editar usuario' }}</ion-title>
+        <ion-buttons slot="end"><ion-button (click)="close()">Cerrar</ion-button></ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <ion-item>
+        <ion-label position="stacked">Nombre</ion-label>
+        <ion-input formControlName="nombre"></ion-input>
+        </ion-item>
+
+        <ion-item>
+        <ion-label position="stacked">Usuario</ion-label>
+        <ion-input formControlName="usuario" [readonly]="mode==='edit'"></ion-input>
+        </ion-item>
+
+        <ion-item>
+        <ion-label position="stacked">Rol</ion-label>
+        <ion-select formControlName="rol">
+            <ion-select-option value="MESERO">Mesero</ion-select-option>
+            <ion-select-option value="DESPACHADOR">Despachador</ion-select-option>
+        </ion-select>
+        </ion-item>
+
+        <ion-item>
+        <ion-label position="stacked">Email (opcional)</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+        </ion-item>
+
+        <ion-item>
+        <ion-label position="stacked">Teléfono (opcional)</ion-label>
+        <ion-input formControlName="telefono"></ion-input>
+        </ion-item>
+
+        @if (mode === 'create') {
+        <ion-item>
+            <ion-label position="stacked">Contraseña</ion-label>
+            <ion-input type="password" formControlName="password"></ion-input>
+        </ion-item>
+        } @else {
+        <ion-item>
+            <ion-label position="stacked">Nueva contraseña (opcional)</ion-label>
+            <ion-input type="password" formControlName="password"></ion-input>
+        </ion-item>
+        }
+
+        <ion-button expand="block" class="ion-margin-top" type="submit">
+        {{ mode === 'create' ? 'Crear' : 'Guardar cambios' }}
+        </ion-button>
+    </form>
+</ion-content>

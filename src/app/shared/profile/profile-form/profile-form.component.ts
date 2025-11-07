@@ -7,7 +7,7 @@ import { UpdateProfileDto } from '../profile.models';
 @Component({
     standalone: true,
     selector: 'app-profile-form',
-    imports: [CommonModule, ReactiveFormsModule, IonItem, IonLabel, IonInput, IonButton],
+    imports: [CommonModule, ReactiveFormsModule, IonItem, IonInput, IonButton],
     templateUrl: './profile-form.component.html',
     styleUrls: ['./profile-form.component.scss']
 })

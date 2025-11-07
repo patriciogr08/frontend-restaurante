@@ -1,0 +1,10 @@
+ion-router-outlet {
+    position: relative;
+    z-index: 0;  
+    pointer-events: auto;
+}
+
+ion-tab-bar {
+    --background: #fff;
+    --border: 0;
+}

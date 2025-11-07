@@ -1,0 +1,7 @@
+.grid-2 {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 8px;
+}
+.hint { display:block; margin-top:6px; color: var(--ion-color-medium); }

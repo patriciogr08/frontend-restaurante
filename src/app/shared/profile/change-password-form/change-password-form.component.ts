@@ -13,7 +13,7 @@ function matchValidator(group: AbstractControl) {
 @Component({
   standalone: true,
   selector: 'app-change-password-form',
-  imports: [CommonModule, ReactiveFormsModule, IonItem, IonLabel, IonInput, IonButton],
+  imports: [CommonModule, ReactiveFormsModule, IonItem, IonInput, IonButton],
   templateUrl: './change-password-form.component.html',
   styleUrls: ['./change-password-form.component.scss']
 })

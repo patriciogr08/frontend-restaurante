@@ -1,4 +1,78 @@
-<ion-content class="ion-padding">
-    <h2>Productos</h2>
-    <p>(Crear productos y tipos — por implementar)</p>
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="end">
+            <ion-button (click)="openCreateTipo()">
+                <ion-icon slot="start" name="pricetag-outline"></ion-icon> Nuevo tipo
+            </ion-button>
+            <ion-button (click)="openCreateProducto()">
+                <ion-icon slot="start" name="add-outline"></ion-icon> Nuevo producto
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+
+    <!-- Filtros compactos -->
+    <ion-toolbar class="filters">
+
+        <div class="filters-row">
+            <ion-input placeholder="Buscar" [value]="filters.value.q"
+                        (ionInput)="filters.patchValue({ q: $any($event.target).value })">
+                <ion-icon slot="start" name="search-outline"></ion-icon>
+            </ion-input>
+            <ion-select interface="popover" placeholder="Tipo" [value]="filters.value.tipo"
+                        (ionChange)="filters.patchValue({ tipo: $event.detail.value })">
+                <ion-select-option value="">Todos</ion-select-option>
+                @for (t of tipos(); track t.id) { <ion-select-option [value]="t.id">{{t.nombre}}</ion-select-option> }
+            </ion-select>
+
+            <ion-select interface="popover" placeholder="Estado" [value]="filters.value.estado"
+                        (ionChange)="filters.patchValue({ estado: $event.detail.value })">
+                <ion-select-option value="">Todos</ion-select-option>
+                <ion-select-option value="ACTIVO">ACTIVO</ion-select-option>
+                <ion-select-option value="INACTIVO">INACTIVO</ion-select-option>
+            </ion-select>
+        </div>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    @if (loading()) {
+        <div class="center"><ion-spinner></ion-spinner></div>
+    } @else {
+        <ion-list class="list">
+        @for (p of rows(); track p.id) {
+            <ion-item lines="full" class="row">
+            <ion-label>
+                <div class="line1">
+                    <span class="name">{{ p.nombre }}</span>
+                    <div class="price-wrap">
+                        @if (p.tieneDescuento && p.pvpReal !== p.pvp) {
+                            <span class="price-old">${{ p.pvpReal | number:'1.2-2' }}</span>
+                        }
+                        <span class="price">${{ p.pvp | number:'1.2-2' }}</span>
+                    </div>                
+                </div>
+
+                <div class="line2">
+                    <span class="chip tipo">{{ p.tipoProducto.nombre }}</span>
+                    @if (p.tieneDescuento) {
+                        <span class="chip desc">-{{ p.descuentoPorcentaje }}% o ({{ p.descuentoValor | number:'1.2-2' }})</span>
+                    }
+                    <span class="chip" [class.ok]="p.estado==='ACTIVO'" [class.off]="p.estado!=='ACTIVO'">{{ p.estado }}</span>
+                </div>
+
+                @if (p.descripcion) { <div class="desc">{{ p.descripcion }}</div> }
+            </ion-label>
+
+            <ion-buttons slot="end" class="actions">
+                <ion-button fill="clear" size="small" (click)="toggleEstado(p)" [title]="p.estado==='ACTIVO' ? 'Desactivar' : 'Activar'">
+                <ion-icon [name]="p.estado==='ACTIVO' ? 'checkmark-circle-outline' : 'close-circle-outline'"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" size="small" (click)="openEditProducto(p)" title="Editar">
+                <ion-icon name="create-outline"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+            </ion-item>
+        }
+        </ion-list>
+    }
 </ion-content>

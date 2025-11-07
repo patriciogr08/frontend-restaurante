@@ -1,0 +1,68 @@
+.user-list {
+  margin-top: 4px;
+}
+
+.user-row {
+  --min-height: 64px;           // más compacto
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --inner-padding-end: 0;
+}
+
+.avatar {
+  width: 40px; height: 40px;
+}
+
+.avatar-fallback {
+  width: 100%; height: 100%;
+  display: grid; place-items: center;
+  background: var(--ion-color-medium);
+  color: #fff; font-weight: 700;
+  border-radius: 50%;
+}
+
+ion-label {
+  margin: 0 8px;
+
+  .top {
+    display: flex; align-items: center; gap: 6px;
+    .name { font-weight: 600; color: var(--ion-text-color); }
+    .handle, .email, .sep { color: var(--ion-color-medium-shade); font-size: 0.88rem; }
+  }
+
+  .meta {
+    margin-top: 4px;
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  }
+}
+
+.chip {
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.2;
+  background: var(--ion-color-light);
+  color: var(--ion-color-medium-contrast);
+
+  &.role.mesero { background: #ede8ff; color: #5a41d6; }
+  &.role.desp   { background: #fff2d6; color: #a06a00; }
+  &.state.ok    { background: #e9f9ee; color: #0f8b3d; }
+  &.state.off   { background: #eee; color: #666; }
+  &.phone       { background: #eef6ff; color: #2473d1; }
+}
+
+.actions {
+  display: flex; align-items: center; gap: 8px;
+  .edit {
+    --padding-start: 6px; --padding-end: 6px;
+    --border-radius: 10px;
+    --icon-size: 18px;
+  }
+}
+
+/* Responsive: en pantallas pequeñas, oculta email si hay poco ancho */
+@media (max-width: 420px) {
+  ion-label .top .email { display: none; }
+  ion-label .top .sep   { display: none; }
+}

@@ -17,9 +17,4 @@ export class ApiService {
         return this.http.post<T>(url, body);
     }
 
-    async showError(e: any) {
-        const msg = e?.error?.message || e?.message || 'Error de comunicación';
-        const t = await this.toast.create({ message: msg, duration: 2500, color: 'danger' });
-        t.present();
-    }
 }

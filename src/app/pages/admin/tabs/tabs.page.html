@@ -1,16 +1,5 @@
-<ion-header>
-    <ion-toolbar>
-        <ion-title>Panel Admin</ion-title>
-        <ion-buttons slot="end">
-        <ion-button (click)="doLogout()">Cerrar Sesión</ion-button>
-        </ion-buttons>
-    </ion-toolbar>
-</ion-header>
-
 <ion-content>
     <ion-tabs>
-        <ion-router-outlet></ion-router-outlet>
-
         <ion-tab-bar slot="bottom">
             <ion-tab-button [routerLink]="['/admin/tabs/dashboard']">
                 <ion-icon name="speedometer-outline"></ion-icon>

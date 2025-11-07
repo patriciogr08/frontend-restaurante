@@ -1,4 +1,61 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Usuarios</ion-title>
+        <ion-buttons slot="end">
+        <ion-button (click)="openCreate()">
+            <ion-icon name="person-add-outline" slot="start"></ion-icon>
+            Crear
+        </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
 <ion-content class="ion-padding">
-    <h2>Usuarios</h2>
-    <p>(Creación de usuario — por implementar)</p>
+    @if (loading()) {
+        <ion-spinner></ion-spinner>
+    } @else {
+        <ion-list class="user-list">
+        @for (u of items(); track u.id) {
+            <ion-item class="user-row" lines="full">
+                <ion-avatar slot="start" class="avatar">
+                    <div class="avatar-fallback">{{ u.nombre[0] }}</div>
+                </ion-avatar>
+
+                <ion-label>
+                    <div class="top">
+                        <span class="name">{{ u.nombre }}</span>
+                        <span class="handle">@{{ u.usuario }}</span>
+                        <span class="sep">·</span>
+                        <span class="email">{{ u.email || 'sin email' }}</span>
+                    </div>
+                    <div class="meta">
+                        <span class="chip role" [class.mesero]="u.rol==='MESERO'" [class.desp]="u.rol==='DESPACHADOR'">{{ u.rol }}</span>
+                        <span class="chip state" [class.ok]="u.estado==='ACTIVO'" [class.off]="u.estado!=='ACTIVO'">{{ u.estado }}</span>
+                        @if (u.telefono) { <span class="chip phone">{{ u.telefono }}</span> }
+                    </div>
+                </ion-label>
+
+                <ion-buttons slot="end" class="actions">
+                    <!-- Estado como icono -->
+                    <ion-button fill="clear" size="small"
+                                (click)="toggleEstado(u)"
+                                [ariaLabel]="u.estado === 'ACTIVO' ? 'Desactivar' : 'Activar'">
+                        <ion-icon
+                            class="state-icon"
+                            [name]="u.estado === 'ACTIVO' ? 'checkmark-circle-outline' : 'close-circle-outline'"
+                            [style.color]="u.estado === 'ACTIVO' ? 'var(--ion-color-success)' : 'var(--ion-color-medium)'">
+                        </ion-icon>
+                    </ion-button>
+
+                    <!-- Editar -->
+                    <ion-button fill="clear" size="small" class="edit"
+                                (click)="openEdit(u)" aria-label="Editar">
+                        <ion-icon name="create-outline"></ion-icon>
+                    </ion-button>
+                </ion-buttons>
+            </ion-item>
+        }
+        </ion-list>
+    }
 </ion-content>
+
