@@ -6,15 +6,15 @@ import {
     IonLabel,AlertController
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from './../../core/services/auth.service';
 
 import { addIcons } from 'ionicons';
 import {
-  speedometerOutline,
-  listOutline,
-  pricetagsOutline,
-  peopleOutline,
-  personCircleOutline
+    speedometerOutline,
+    listOutline,
+    pricetagsOutline,
+    peopleOutline,
+    personCircleOutline
 } from 'ionicons/icons';
 
 @Component({
@@ -24,8 +24,7 @@ import {
     styleUrls: ['./tabs.page.scss'],
     imports: [
         CommonModule, RouterLink,
-        IonHeader, IonToolbar, IonTitle, IonButtons, IonButton,
-        IonContent, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon,
+        IonContent, IonTabs, IonTabBar, IonTabButton, IonIcon,
         IonLabel
   ]
 })

@@ -1,0 +1,23 @@
+<ion-tabs>
+    <ion-tab-bar slot="bottom">
+        <ion-tab-button [routerLink]="['/mesero/mesas']">
+            <ion-icon name="grid-outline" />
+            <ion-label>Mesas</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button [routerLink]="['/mesero/pedidos']">
+            <ion-icon name="create-outline" />
+            <ion-label>Pedido</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button [routerLink]="['/mesero/mis-pedidos']">
+            <ion-icon name="list-outline"></ion-icon>
+            <ion-label>Mis pedidos</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button [routerLink]="['/mesero/perfil']">
+            <ion-icon name="person-circle-outline" />
+            <ion-label>Perfil</ion-label>
+        </ion-tab-button>
+    </ion-tab-bar>
+</ion-tabs>

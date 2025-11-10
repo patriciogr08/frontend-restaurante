@@ -1,27 +1,32 @@
 <ion-content>
     <ion-tabs>
         <ion-tab-bar slot="bottom">
-            <ion-tab-button [routerLink]="['/admin/tabs/dashboard']">
+            <ion-tab-button [routerLink]="['/admin/dashboard']">
                 <ion-icon name="speedometer-outline"></ion-icon>
                 <ion-label>Dashboard</ion-label>
             </ion-tab-button>
+            
+            <ion-tab-button [routerLink]="['/admin/mesas']">
+                <ion-icon name="grid-outline" />
+                <ion-label>Mesas</ion-label>
+            </ion-tab-button>
 
-            <ion-tab-button [routerLink]="['/admin/tabs/pedidos']">
+            <ion-tab-button [routerLink]="['/admin/pedidos']">
                 <ion-icon name="list-outline"></ion-icon>
                 <ion-label>Pedidos</ion-label>
             </ion-tab-button>
 
-            <ion-tab-button [routerLink]="['/admin/tabs/productos']">
+            <ion-tab-button [routerLink]="['/admin/productos']">
                 <ion-icon name="pricetags-outline"></ion-icon>
                 <ion-label>Productos</ion-label>
             </ion-tab-button>
 
-            <ion-tab-button [routerLink]="['/admin/tabs/usuarios']">
+            <ion-tab-button [routerLink]="['/admin/usuarios']">
                 <ion-icon name="people-outline"></ion-icon>
                 <ion-label>Usuarios</ion-label>
             </ion-tab-button>
 
-            <ion-tab-button [routerLink]="['/admin/tabs/perfil']">
+            <ion-tab-button [routerLink]="['/admin/perfil']">
                 <ion-icon name="person-circle-outline"></ion-icon>
                 <ion-label>Perfil</ion-label>
             </ion-tab-button>

@@ -1,13 +1,13 @@
-// src/app/core/guards/role.guard.ts
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 
-export const RoleGuard = (roles: string[]): CanActivateFn => () => {
-    const auth = inject(AuthService);
+export const adminGuard: CanActivateFn = () => {
     const router = inject(Router);
+    const auth = inject(AuthService);
     const user = auth.currentUser;
-    if (user && roles.includes(user.rol)) return true;
-    router.navigateByUrl('/login');
+    if (user?.rol === 'ADMIN') return true;
+
+    router.navigateByUrl('/home'); // o a una página de “acceso denegado”
     return false;
 };

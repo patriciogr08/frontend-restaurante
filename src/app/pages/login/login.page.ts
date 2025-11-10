@@ -58,7 +58,7 @@ export class LoginPage {
                 await loader.dismiss();
                 const role = resp.user?.rol ?? this.auth.role;
                 const target =
-                    role === 'ADMIN'       ? '/admin/tabs' :
+                    role === 'ADMIN'       ? '/admin' :
                     role === 'MESERO'      ? '/mesero'     :
                     role === 'DESPACHADOR' ? '/despacho'   : '/';
 

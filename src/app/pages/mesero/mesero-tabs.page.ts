@@ -13,6 +13,5 @@ import { gridOutline, restaurantOutline, listOutline, personCircleOutline } from
 })
 export class MeseroTabsPage {
     constructor() {
-        addIcons({ gridOutline, restaurantOutline, listOutline, personCircleOutline });
     }
 }

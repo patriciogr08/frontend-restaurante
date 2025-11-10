@@ -1,0 +1,39 @@
+/* 2 columnas fijas (grid 2xN). Ajusta minmax si quieres cards más angostos/anchos */
+.tiles-2cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mesa-card {
+    padding: 12px;
+    border-radius: 14px;
+    display: grid;
+    grid-template-rows: auto auto; /* top + bottom */
+    row-gap: 10px;
+    height: 120px;                 /* alto compacto para que quepan más filas */
+    box-shadow: 0 6px 18px rgba(16, 24, 40, .06);
+}
+
+.mesa-card.deleted {
+    filter: grayscale(.25);
+    opacity: .9;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title { font-weight: 700; font-size: 1rem; }
+.cap   { color: var(--ion-color-medium); font-size: .9rem; }
+
+.actions {
+    display: flex; align-items: center; gap: 4px;
+    ion-button { --padding-start: 6px; --padding-end: 6px; --border-radius: 10px; }
+}
+
+/* Si alguna pantalla es muy angosta y quieres mantener 2 columnas,
+   puedes forzar min-width de la card:
+.mesa-card { min-width: 150px; }
+*/

@@ -33,6 +33,10 @@ import {
 
   // Chevrons / UI
   chevronBackOutline, chevronForwardOutline, chevronDownOutline, chevronUpOutline,
+  gridOutline,
+  refreshCircleOutline,
+  archiveOutline,
+  checkboxOutline,
 } from 'ionicons/icons';
 
 addIcons({
@@ -68,4 +72,6 @@ addIcons({
 
   // Chevrons
   chevronBackOutline, chevronForwardOutline, chevronDownOutline, chevronUpOutline,
+
+  gridOutline, refreshCircleOutline, archiveOutline, checkboxOutline 
 });
