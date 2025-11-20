@@ -9,3 +9,4 @@ export interface Mesa {
     updatedAt?: string|null;
     deletedAt?: string|null; // <- para soft-delete
 }
+

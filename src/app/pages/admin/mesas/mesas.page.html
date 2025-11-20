@@ -1,6 +1,7 @@
 <ion-header>
     <ion-toolbar>
         <ion-title>Mesas</ion-title>
+
         <ion-buttons slot="end">
         <ion-button (click)="openCreate()">
             <ion-icon name="add-outline" slot="start" />
@@ -12,9 +13,17 @@
     <ion-toolbar>
         <ion-segment
         [value]="includeDeleted() ? 'eliminadas' : 'activos'"
-        (ionChange)="includeDeleted.set($event.detail.value === 'eliminadas')">
-        <ion-segment-button value="activos"><ion-label>Activas</ion-label></ion-segment-button>
-        <ion-segment-button value="eliminadas"><ion-label>Eliminadas</ion-label></ion-segment-button>
+        (ionChange)="includeDeleted.set($event.detail.value === 'eliminadas')"
+        >
+        <ion-segment-button value="activos">
+            <ion-icon name="restaurant-outline"></ion-icon>
+            <ion-label>Activas</ion-label>
+        </ion-segment-button>
+
+        <ion-segment-button value="eliminadas">
+            <ion-icon name="trash-bin-outline"></ion-icon>
+            <ion-label>Eliminadas</ion-label>
+        </ion-segment-button>
         </ion-segment>
     </ion-toolbar>
 </ion-header>
@@ -24,21 +33,49 @@
         <ion-refresher-content pullingIcon="refresh-circle-outline"></ion-refresher-content>
     </ion-refresher>
 
+    <!-- MESAS ACTIVAS -->
     @if (!includeDeleted()) {
-        <div class="tiles-2cols ion-padding">
-            @for (m of activos(); track m.id) {
-                <ion-card class="mesa-card">
-                <div class="row top">
-                    <div class="title">Mesa #{{ m.numero }}</div>
-                    <ion-badge
-                    [color]="m.ocupacion === 'LIBRE' ? 'success' : (m.ocupacion === 'OCUPADA' ? 'warning' : 'tertiary')">
-                    {{ m.ocupacion }}
-                    </ion-badge>
-                </div>
+        <div class="mesas-wrapper ion-padding">
+        <div class="mesas-header">
+            <div class="mesas-title">
+            <h2>Mesas activas</h2>
+            <p>Gestiona la capacidad y ocupación del salón</p>
+            </div>
 
-                <div class="row bottom">
-                    <div class="cap">Cap: {{ m.capacidad }}</div>
-                    <div class="actions">
+            <ion-chip outline="true">
+            <ion-icon name="grid-outline"></ion-icon>
+            <ion-label>{{ activos().length }} mesa(s)</ion-label>
+            </ion-chip>
+        </div>
+
+        <div class="tiles-2cols">
+            @for (m of activos(); track m.id) {
+            <ion-card class="mesa-card" [class.ocupada]="m.ocupacion !== 'LIBRE'">
+                <ion-card-header>
+                <div class="mesa-top-row">
+                    <div class="mesa-title">
+                    <span class="mesa-numero">Mesa {{ m.numero }}</span>
+                    <span class="mesa-estado-pill">
+                        <span
+                        class="estado-dot"
+                        [class.libre]="m.ocupacion === 'LIBRE'"
+                        [class.ocupada]="m.ocupacion === 'OCUPADA'"
+                        [class.reservada]="m.ocupacion !== 'LIBRE' && m.ocupacion !== 'OCUPADA'"
+                        ></span>
+                        {{ m.ocupacion }}
+                    </span>
+                    </div>
+                </div>
+                </ion-card-header>
+
+                <ion-card-content>
+                <div class="mesa-info-row">
+                    <div class="mesa-capacidad">
+                    <ion-icon name="people-outline"></ion-icon>
+                    <span>Cap: {{ m.capacidad }}</span>
+                    </div>
+
+                    <div class="mesa-actions">
                     <ion-button fill="clear" size="small" (click)="openEdit(m)">
                         <ion-icon name="pencil-outline"></ion-icon>
                     </ion-button>
@@ -47,34 +84,71 @@
                     </ion-button>
                     </div>
                 </div>
-                </ion-card>
+                </ion-card-content>
+            </ion-card>
             } @empty {
-                <div class="ion-padding ion-text-center ion-color-medium">No hay mesas activas.</div>
+            <div class="ion-padding ion-text-center ion-color-medium">
+                No hay mesas activas.
+            </div>
             }
         </div>
-    } @else {
-        <div class="tiles-2cols ion-padding">
-            @for (m of eliminados(); track m.id) {
-                <ion-card class="mesa-card deleted">
-                <div class="row top">
-                    <div class="title">Mesa #{{ m.numero }}</div>
-                    <ion-badge color="medium">ELIMINADA</ion-badge>
-                </div>
-                <div class="row bottom">
-                    <div class="cap">Cap: {{ m.capacidad }}</div>
-                    <div class="actions">
-                    <ion-button fill="clear" size="small" color="success" (click)="restore(m)">
-                        <ion-icon name="archive-outline"></ion-icon>
-                    </ion-button>
-                    </div>
-                </div>
-                </ion-card>
-            } @empty {
-                <div class="ion-padding ion-text-center ion-color-medium">No hay mesas eliminadas.</div>
-            }
         </div>
     }
 
+    <!-- MESAS ELIMINADAS -->
+    @if (includeDeleted()) {
+        <div class="mesas-wrapper ion-padding">
+        <div class="mesas-header">
+            <div class="mesas-title">
+            <h2>Mesas eliminadas</h2>
+            <p>Puedes restaurarlas cuando lo necesites</p>
+            </div>
+
+            <ion-chip outline="true" color="medium">
+            <ion-icon name="archive-outline"></ion-icon>
+            <ion-label>{{ eliminados().length }} mesa(s)</ion-label>
+            </ion-chip>
+        </div>
+
+        <div class="tiles-2cols">
+            @for (m of eliminados(); track m.id) {
+            <ion-card class="mesa-card deleted">
+                <ion-card-header>
+                <div class="mesa-top-row">
+                    <div class="mesa-title">
+                    <span class="mesa-numero">Mesa {{ m.numero }}</span>
+                    <span class="mesa-estado-pill deleted-pill">
+                        ELIMINADA
+                    </span>
+                    </div>
+                </div>
+                </ion-card-header>
+
+                <ion-card-content>
+                <div class="mesa-info-row">
+                    <div class="mesa-capacidad">
+                    <ion-icon name="people-outline"></ion-icon>
+                    <span>Capacidad: {{ m.capacidad }}</span>
+                    </div>
+
+                    <div class="mesa-actions">
+                    <ion-button fill="clear" size="small" color="success" (click)="restore(m)">
+                        <ion-icon name="refresh-outline"></ion-icon>
+                    </ion-button>
+                    </div>
+                </div>
+                </ion-card-content>
+            </ion-card>
+            } @empty {
+            <div class="ion-padding ion-text-center ion-color-medium">
+                No hay mesas eliminadas.
+            </div>
+            }
+        </div>
+        </div>
+    }
+
+    <!-- FAB (opcional, lo puedes quitar si te basta el botón del header) -->
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button (click)="openCreate()">
         <ion-icon name="add-outline"></ion-icon>

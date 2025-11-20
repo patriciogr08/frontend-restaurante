@@ -1,0 +1,94 @@
+ion-content {
+  --background: var(--ion-color-light);
+}
+
+.segment-toolbar {
+  --background: var(--ion-color-light);
+  padding-inline: 8px;
+
+  ion-segment {
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+}
+
+.pedidos-list {
+  padding: 10px;
+}
+
+.pedido-card {
+  border-radius: 18px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  margin-bottom: 12px;
+
+  ion-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  ion-card-subtitle {
+    font-size: 0.85rem;
+  }
+}
+
+.pedido-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+
+  ion-chip {
+    font-size: 0.7rem;
+  }
+}
+
+.pedido-body {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    gap: 8px;
+    font-size: 0.8rem;
+
+    .pedido-montos {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        span {
+        color: var(--ion-color-medium);
+        }
+
+        &.total b {
+        color: var(--ion-color-primary);
+        }
+    }
+}
+
+.pedido-fecha {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: var(--ion-color-medium);
+
+    ion-icon {
+        font-size: 0.9rem;
+    }
+}
+
+.empty-wrap {
+    height: 100%;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--ion-color-medium);
+
+    ion-icon {
+        font-size: 3rem;
+        margin-bottom: 8px;
+    }
+}

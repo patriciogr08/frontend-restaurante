@@ -1,0 +1,37 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Seleccionar mesero</ion-title>
+        <ion-buttons slot="end">
+        <ion-button (click)="cerrar()">
+            <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-searchbar
+        placeholder="Buscar por nombre"
+        [debounce]="300"
+        (ionInput)="onBuscar($event)">
+    </ion-searchbar>
+
+    @if (loading) {
+        <ion-spinner class="spinner-center"></ion-spinner>
+    } @else if (meseros.length) {
+        <ion-list>
+        @for (m of meseros; track m.id) {
+            <ion-item button (click)="seleccionar(m)">
+            <ion-label>
+                <h2>{{ m.nombre }}</h2>
+                <p>{{ m.email }}</p>
+            </ion-label>
+            </ion-item>
+        }
+        </ion-list>
+    } @else {
+        <ion-text class="empty">
+        <p>No se encontraron meseros.</p>
+        </ion-text>
+    }
+</ion-content>

@@ -1,0 +1,43 @@
+<!-- src/app/shared/modals/producto-picker.modal.html -->
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Buscar producto</ion-title>
+        <ion-buttons slot="end">
+        <ion-button (click)="cerrar()">
+            <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-searchbar
+        placeholder="Nombre del producto"
+        (ionInput)="onBuscar($event)"
+        [debounce]="300">
+    </ion-searchbar>
+
+    @if (loading) {
+        <ion-spinner class="spinner-center"></ion-spinner>
+    } @else if (productos.length) {
+        <ion-list>
+        @for (p of productos; track p.id) {
+            <ion-item button (click)="seleccionar(p)">
+            <ion-label>
+                <h2>{{ p.nombre }}</h2>
+                <p>{{ p.descripcion }}</p>
+                <p>Precio: {{ p.precio | number:'1.2-2' }}</p>
+            </ion-label>
+            </ion-item>
+        }
+        </ion-list>
+    } @else if (term && term.length >= 2) {
+        <ion-text class="empty">
+        <p>No se encontraron productos.</p>
+        </ion-text>
+    } @else {
+        <ion-text class="empty">
+        <p>Escribe al menos 2 letras para buscar.</p>
+        </ion-text>
+    }
+</ion-content>

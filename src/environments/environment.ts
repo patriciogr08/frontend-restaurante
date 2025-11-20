@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   apiBaseUrl: 'http://localhost:3200/api',
+  wsUrl: 'http://localhost:3200',
   storage: {
     TOKEN_KEY: 'auth_token',
     USER_KEY:  'auth_user'

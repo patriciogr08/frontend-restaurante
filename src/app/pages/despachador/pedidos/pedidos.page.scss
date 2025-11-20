@@ -1,0 +1,121 @@
+.layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+  padding: 8px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel-pedidos {
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.panel-resumen {
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.pedido-card {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &.seleccionado {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  &.tiempo-ok {
+    border-left: 4px solid var(--ion-color-success);
+  }
+
+  &.tiempo-warning {
+    border-left: 4px solid var(--ion-color-warning);
+  }
+
+  &.tiempo-danger {
+    border-left: 4px solid var(--ion-color-danger);
+  }
+
+  &.despachado {
+    border-left: 4px solid var(--ion-color-medium);
+    opacity: 0.9;
+  }
+}
+
+.pedido-detalle-inline {
+  margin-top: -8px; // se pega al card
+  margin-bottom: 12px;
+}
+
+.item-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-nombre {
+  font-weight: 500;
+}
+
+.item-cantidad {
+  font-weight: 500;
+}
+
+.item-nota {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--ion-color-medium);
+}
+
+ion-item.extra {
+  --background: rgba(255, 196, 0, 0.06);
+  border-left: 3px solid var(--ion-color-warning);
+}
+
+.detalle-footer {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .total {
+    font-weight: 600;
+    text-align: right;
+  }
+}
+
+.resumen-card {
+  margin-bottom: 12px;
+}
+
+.resumen-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.resumen-item .cantidad {
+  font-weight: 600;
+}
+
+.empty-msg {
+  display: block;
+  text-align: center;
+  margin-top: 24px;
+}
+
+.pedidos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); // ajusta 280 si quieres más ancho/angosto
+  gap: 12px;
+}
+
+.pedido-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+

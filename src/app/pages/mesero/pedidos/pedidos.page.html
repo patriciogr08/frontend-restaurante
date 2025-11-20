@@ -1,10 +1,122 @@
-<!-- src/app/pages/mesero/pedidos/pedidos.page.html -->
 <ion-header>
-    <ion-toolbar>
-        <ion-title>Pedidos abiertos</ion-title>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-title>Pedido actual</ion-title>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <!-- TODO: lista EN_PROCESO, editar items -->
+<ion-content fullscreen>
+  <ion-refresher slot="fixed" (ionRefresh)="cargarCarrito($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  @if (carrito) {
+    <ion-card class="resumen-card">
+      <ion-card-header>
+        <ion-card-title>
+          Mesa {{ mesaId ?? carrito.mesaId }}
+        </ion-card-title>
+        <ion-card-subtitle>
+          Carrito #{{ carrito.id }}
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="resumen-row">
+          <div class="resumen-info">
+            <div class="tag">
+              <ion-icon name="cart-outline"></ion-icon>
+              <span>{{ carrito.items?.length || 0 }} items</span>
+            </div>
+            <div class="tag">
+              <ion-icon name="cash-outline"></ion-icon>
+              <span>Estimado: {{ totalCarrito | number:'1.2-2' }}</span>
+            </div>
+          </div>
+          <ion-badge color="primary" *ngIf="carrito.estado">
+            {{ carrito.estado }}
+          </ion-badge>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    @if (tieneItems) {
+      <ion-list class="items-list">
+        @for (it of carrito!.items!; track it.id) {
+          <ion-item lines="full">
+            <ion-avatar slot="start">
+              <div class="item-avatar">
+                <ion-icon name="fast-food-outline"></ion-icon>
+              </div>
+            </ion-avatar>
+
+            <ion-label>
+              <h2>Producto {{ it.producto?.nombre }}</h2>
+              <p>
+                Cant: <b>{{ it.cantidad }}</b> ·
+                Precio: {{ it.precioUnitario | number:'1.2-2' }}
+              </p>
+              @if (it.notas) {
+                <p class="notas">"{{ it.notas }}"</p>
+              }
+            </ion-label>
+
+            <div class="item-actions" slot="end">
+              <ion-button fill="clear" size="small" (click)="editarItem(it)">
+                <ion-icon name="create-outline"></ion-icon>
+              </ion-button>
+
+              <ion-button
+                fill="clear"
+                size="small"
+                color="danger"
+                (click)="eliminarItem(it)"
+              >
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-item>
+        }
+      </ion-list>
+    } @else {
+      <div class="empty-wrap">
+        <ion-icon name="cart-outline"></ion-icon>
+        <p>Carrito vacío. Agrega productos desde esta misma pantalla.</p>
+      </div>
+    }
+  } @else {
+    <div class="empty-wrap">
+      <ion-icon name="information-circle-outline"></ion-icon>
+      <p>Ve a la pestaña Mesas y abre/entra a una mesa.</p>
+    </div>
+  }
 </ion-content>
+
+<ion-footer class="footer-actions" *ngIf="carrito">
+  <ion-toolbar>
+    <div class="footer-buttons">
+      <ion-button expand="block" (click)="agregarItem()" [disabled]="!carritoId">
+        <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+        Agregar producto
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        color="medium"
+        [disabled]="!tieneItems"
+        (click)="limpiarCarrito()"
+      >
+        <ion-icon slot="start" name="trash-bin-outline"></ion-icon>
+        Limpiar
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        color="success"
+        [disabled]="!tieneItems"
+        (click)="enviarACocina()"
+      >
+        <ion-icon slot="start" name="restaurant-outline"></ion-icon>
+        Enviar
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

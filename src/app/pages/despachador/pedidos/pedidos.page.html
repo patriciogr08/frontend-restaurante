@@ -1,0 +1,229 @@
+<!-- src/app/pages/despachador/pedidos/pedidos.page.html -->
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Pedidos</ion-title>
+    </ion-toolbar>
+
+    <ion-toolbar>
+        <ion-segment [value]="activeTab" (ionChange)="changeTab($any($event.detail.value))">
+        <ion-segment-button value="proceso">
+            <ion-label>En proceso</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="despachados">
+            <ion-label>Despachados</ion-label>
+        </ion-segment-button>
+        </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <!-- TAB: EN PROCESO -->
+    @if (activeTab === 'proceso') {
+    <div class="layout">
+        <!-- LISTA DE PEDIDOS (IZQUIERDA) -->
+        <div class="panel-pedidos">
+        @if (!pedidosEnProceso.length) {
+            <ion-text color="medium" class="empty-msg">
+            No hay pedidos en proceso.
+            </ion-text>
+        } @else {
+            <!-- GRID DE PEDIDOS -->
+            <div class="pedidos-grid">
+            @for (p of pedidosEnProceso; track p.id) {
+
+                <div class="pedido-wrapper">
+                <!-- CARD PRINCIPAL -->
+                <ion-card
+                    class="pedido-card"
+                    [ngClass]="claseTiempo(p)"
+                    (click)="seleccionarPedido(p)"
+                    [class.seleccionado]="pedidoSeleccionado?.id === p.id">
+
+                    <ion-card-header>
+                    <ion-card-title>
+                        Mesa {{ p.mesaNumero }}
+                    </ion-card-title>
+                    <ion-card-subtitle>
+                        {{ tiempoLabel(p) }}
+                    </ion-card-subtitle>
+                    </ion-card-header>
+
+                    <ion-card-content>
+                    <div class="pedido-meta">
+                        <span>
+                        Total: {{ p.total | number:'1.2-2' }} -- Items: {{ p.items.length }}
+                        </span>
+                    </div>
+
+                    <div class="barra-tiempo">
+                        <div class="barra-tiempo-fill"></div>
+                    </div>
+                    </ion-card-content>
+                </ion-card>
+
+                <!-- DETALLE EXPANDIBLE ABAJO DEL CARD SELECCIONADO -->
+                @if (pedidoSeleccionado?.id === p.id) {
+                    <div class="pedido-detalle-inline">
+                    <ion-card>
+                        <ion-card-content>
+                        <span>{{ tiempoLabel(p) }}</span>
+
+                        <ion-list>
+                            @for (item of p.items; track item.id) {
+                            <ion-item [class.extra]="item.isExtra">
+                                <ion-label>
+                                <div class="item-line">
+                                    <span class="item-nombre">{{ item.nombre }}</span>
+                                    <span class="item-cantidad">x{{ item.cantidad }}</span>
+                                </div>
+
+                                @if (item.nota) {
+                                    <div class="item-nota">
+                                    Nota: {{ item.nota }}
+                                    </div>
+                                }
+
+                                @if (item.isExtra) {
+                                    <div class="item-extra-tag">
+                                    <ion-badge color="warning">EXTRA</ion-badge>
+                                    </div>
+                                }
+                                </ion-label>
+                            </ion-item>
+                            }
+                        </ion-list>
+
+                        <div class="detalle-footer">
+                            <ion-button
+                            expand="block"
+                            color="primary"
+                            (click)="despachar(p); $event.stopPropagation()">
+                            Marcar como despachado
+                            </ion-button>
+                        </div>
+                        </ion-card-content>
+                    </ion-card>
+                    </div>
+                }
+                </div>
+
+            }
+            </div>
+        }
+        </div>
+
+        <!-- RESUMEN LATERAL (DERECHA) -->
+        <div class="panel-resumen">
+        <ion-card class="resumen-card">
+            <ion-card-header>
+            <ion-card-title>Resumen en proceso</ion-card-title>
+            <ion-card-subtitle>Todos los productos</ion-card-subtitle>
+            </ion-card-header>
+
+            <ion-card-content>
+            @if (!resumenProductos.length) {
+                <ion-text color="medium">
+                No hay productos en proceso.
+                </ion-text>
+            } @else {
+                <ion-list>
+                @for (r of resumenProductos; track r.nombre) {
+                    <ion-item>
+                    <ion-label>
+                        <div class="resumen-item">
+                        <span>{{ r.nombre }}</span>
+                        <span class="cantidad">x{{ r.cantidadTotal }}</span>
+                        </div>
+                        @if (r.items.length) {
+                        <div class="resumen-notas">
+                            @for (it of r.items; track it.id) {
+                            @if (it.nota) {
+                                <div class="resumen-nota">
+                                • x{{ it.cantidad }} – {{ it.nota }}
+                                </div>
+                            }
+                            }
+                        </div>
+                        }
+                    </ion-label>
+                    </ion-item>
+                }
+                </ion-list>
+            }
+            </ion-card-content>
+        </ion-card>
+        </div>
+
+    </div>
+    }
+
+    <!-- TAB: DESPACHADOS -->
+    @if (activeTab === 'despachados') {
+    <ion-list>
+        @if (!pedidosDespachados.length) {
+        <ion-text color="medium" class="empty-msg">
+            No hay pedidos despachados aún.
+        </ion-text>
+        } @else {
+        @for (p of pedidosDespachados; track p.id) {
+
+            <!-- CARD PRINCIPAL -->
+            <ion-card
+                class="pedido-card despachado"
+                (click)="seleccionarPedido(p)"
+                [class.seleccionado]="pedidoSeleccionado?.id === p.id">
+                <ion-card-header>
+                    <ion-card-title>Mesa {{ p.mesaNumero }}</ion-card-title>
+                    <ion-card-subtitle>Despachado</ion-card-subtitle>
+                </ion-card-header>
+
+                <ion-card-content>
+                    <div class="pedido-meta">
+                    <span>Total: {{ p.total | number:'1.2-2' }} -- Items: {{ p.items.length }} </span>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+
+            <!-- DETALLE EXPANDIBLE ABAJO DEL CARD SELECCIONADO -->
+            @if (pedidoSeleccionado?.id === p.id) {
+            <div class="pedido-detalle-inline">
+                <ion-card>
+                <ion-card-content>
+                    <ion-list>
+                    @for (item of p.items; track item.id) {
+                        <ion-item [class.extra]="item.isExtra">
+                        <ion-label>
+                            <div class="item-line">
+                            <span class="item-nombre">{{ item.nombre }}</span>
+                            <span class="item-cantidad">x{{ item.cantidad }}</span>
+                            </div>
+
+                            @if (item.nota) {
+                            <div class="item-nota">
+                                Nota: {{ item.nota }}
+                            </div>
+                            }
+                            @if (item.isExtra) {
+                            <div class="item-extra-tag">
+                                <ion-badge color="warning">EXTRA</ion-badge>
+                            </div>
+                            }
+                        </ion-label>
+                        </ion-item>
+                    }
+                    </ion-list>
+
+                    <div class="detalle-footer">
+                        <ion-badge color="success">Pedido despachado</ion-badge>
+                    </div>
+                </ion-card-content>
+                </ion-card>
+            </div>
+            }
+        }
+        }
+    </ion-list>
+    }
+
+
+</ion-content>

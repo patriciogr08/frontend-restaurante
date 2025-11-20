@@ -1,39 +1,145 @@
-/* 2 columnas fijas (grid 2xN). Ajusta minmax si quieres cards más angostos/anchos */
+.mesas-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mesas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.mesas-title h2 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.mesas-title p {
+  font-size: 0.8rem;
+  margin: 2px 0 0;
+  color: var(--ion-color-medium);
+}
+
+/* Grid de 2x3 que ya usabas, pero un poco más flexible */
 .tiles-2cols {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
 }
 
+/* CARD DE MESA */
 .mesa-card {
-    padding: 12px;
-    border-radius: 14px;
-    display: grid;
-    grid-template-rows: auto auto; /* top + bottom */
-    row-gap: 10px;
-    height: 120px;                 /* alto compacto para que quepan más filas */
-    box-shadow: 0 6px 18px rgba(16, 24, 40, .06);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.mesa-card.deleted {
-    filter: grayscale(.25);
-    opacity: .9;
+.mesa-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-left: 4px solid var(--ion-color-success);
+  border-radius: 12px;
+  pointer-events: none;
 }
 
-.row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+/* cambiar color de la "barra" cuando está ocupada */
+.mesa-card.ocupada::before {
+  border-left-color: var(--ion-color-warning);
 }
 
-.title { font-weight: 700; font-size: 1rem; }
-.cap   { color: var(--ion-color-medium); font-size: .9rem; }
-
-.actions {
-    display: flex; align-items: center; gap: 4px;
-    ion-button { --padding-start: 6px; --padding-end: 6px; --border-radius: 10px; }
+.mesa-card.deleted::before {
+  border-left-color: var(--ion-color-medium);
 }
 
-/* Si alguna pantalla es muy angosta y quieres mantener 2 columnas,
-   puedes forzar min-width de la card:
-.mesa-card { min-width: 150px; }
-*/
+.mesa-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.mesa-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mesa-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mesa-numero {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.mesa-estado-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.mesa-estado-pill.deleted-pill {
+  background: rgba(128, 128, 128, 0.12);
+  color: var(--ion-color-medium);
+}
+
+.estado-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ion-color-medium);
+}
+
+.estado-dot.libre {
+  background: var(--ion-color-success);
+}
+
+.estado-dot.ocupada {
+  background: var(--ion-color-warning);
+}
+
+.estado-dot.reservada {
+  background: var(--ion-color-tertiary);
+}
+
+.mesa-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.mesa-capacidad {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--ion-color-medium);
+}
+
+.mesa-capacidad ion-icon {
+  font-size: 1rem;
+}
+
+.mesa-actions {
+  display: flex;
+  align-items: center;
+}
+
+/* Mensajes vacíos */
+.empty-msg {
+  display: block;
+  text-align: center;
+  margin-top: 24px;
+}

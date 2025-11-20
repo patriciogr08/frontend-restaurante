@@ -2,8 +2,83 @@
   <ion-toolbar>
     <ion-title>Mis pedidos</ion-title>
   </ion-toolbar>
+
+  <ion-toolbar class="segment-toolbar">
+    <ion-segment
+      [value]="estadoFiltro"
+      (ionChange)="onSegmentChange($event)"
+    >
+      <ion-segment-button value="EN_PROCESO">
+        <ion-label>En proceso</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="DESPACHADO">
+        <ion-label>Despachados</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="TODOS">
+        <ion-label>Todos</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-note>Listado de pedidos en proceso (pendiente).</ion-note>
+<ion-content fullscreen>
+  <ion-refresher slot="fixed" (ionRefresh)="cargar($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  @if (pedidos.length) {
+    <ion-list class="pedidos-list">
+      @for (p of pedidos; track p.id) {
+        <ion-card button (click)="openPedido(p)" class="pedido-card">
+          <ion-card-header>
+            <div class="pedido-header">
+              <div>
+                <ion-card-title>Pedido #{{ p.id }}</ion-card-title>
+                <ion-card-subtitle>Mesa {{ p.mesaId }}</ion-card-subtitle>
+              </div>
+
+              <ion-chip
+                  size="small"
+                  [color]="getEstadoConfig(p.estado).color"
+                >
+                  <ion-icon
+                    [name]="getEstadoConfig(p.estado).icon"
+                  ></ion-icon>
+                  <ion-label>
+                    {{ getEstadoConfig(p.estado).label }}
+                  </ion-label>
+              </ion-chip>
+            </div>
+          </ion-card-header>
+
+          <ion-card-content>
+            <div class="pedido-body">
+              <div class="pedido-montos">
+                <span>Subtotal</span>
+                <b>{{ p.subtotal | number:'1.2-2' }}</b>
+              </div>
+              <div class="pedido-montos">
+                <span>IVA</span>
+                <b>{{ p.ivaMonto | number:'1.2-2' }}</b>
+              </div>
+              <div class="pedido-montos total">
+                <span>Total</span>
+                <b>{{ p.total | number:'1.2-2' }}</b>
+              </div>
+            </div>
+
+            <div class="pedido-fecha">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <span>{{ p.createdAt | date:'shortTime' }}</span>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      }
+    </ion-list>
+  } @else {
+    <div class="empty-wrap">
+      <ion-icon name="receipt-outline"></ion-icon>
+      <p>No tienes pedidos {{ estadoFiltro === 'EN_PROCESO' ? 'en proceso' : (estadoFiltro === 'DESPACHADO' ? 'despachados' : 'hoy') }}.</p>
+    </div>
+  }
 </ion-content>

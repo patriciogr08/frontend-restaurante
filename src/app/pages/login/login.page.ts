@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 
 import { addIcons } from 'ionicons';
 import { eyeOutline, eyeOffOutline, logInOutline, mailOutline, lockClosedOutline } from 'ionicons/icons';
+import { WsService } from 'src/app/core/services/ws.service';
 
 @Component({
     standalone: true,
@@ -30,6 +31,7 @@ export class LoginPage {
     private router = inject(Router);
     private loading = inject(LoadingController);
     private toast = inject(ToastController);
+    private ws = inject(WsService);
 
     showPassword = false;
 
@@ -60,8 +62,9 @@ export class LoginPage {
                 const target =
                     role === 'ADMIN'       ? '/admin' :
                     role === 'MESERO'      ? '/mesero'     :
-                    role === 'DESPACHADOR' ? '/despacho'   : '/';
-
+                    role === 'DESPACHADOR' ? '/despachador'   : '/';
+               
+                this.ws.connectIfNeeded(resp.user);
                 this.router.navigateByUrl(target, { replaceUrl: true });
             },
             error: async (err) => {

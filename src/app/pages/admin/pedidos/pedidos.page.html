@@ -1,14 +1,200 @@
 <!-- src/app/pages/admin/pedidos/pedidos.page.html -->
-<ion-content class="ion-padding">
-    <h2>Pedidos</h2>
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Pedidos</ion-title>
+    </ion-toolbar>
 
-    <!-- Bind 100% reactivo -->
-    <ion-segment [value]="estadoCtrl.value" (ionChange)="onSegmentChange($event)">
-        <ion-segment-button value="en_proceso"><ion-label>En proceso</ion-label></ion-segment-button>
-        <ion-segment-button value="despachados"><ion-label>Despachados</ion-label></ion-segment-button>
-        <ion-segment-button value="cobrados"><ion-label>Cobrados</ion-label></ion-segment-button>
-        <ion-segment-button value="cancelados"><ion-label>Cancelados</ion-label></ion-segment-button>
-    </ion-segment>
+    <ion-toolbar>
+        <ion-segment [value]="estadoCtrl.value" (ionChange)="onSegmentChange($event)">
+        <ion-segment-button value="en_proceso">
+            <ion-label>En proceso</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="despachados">
+            <ion-label>Despachados</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="cobrados">
+            <ion-label>Cobrados</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="cancelados">
+            <ion-label>Cancelados</ion-label>
+        </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+</ion-header>
 
-    <p>(Listado por estado — por implementar)</p>
+<ion-content [fullscreen]="true" class="ion-padding">
+    <div class="admin-pedidos-layout">
+        <!-- LISTA IZQUIERDA -->
+        <div class="admin-pedidos-lista">
+        @if (cargando) {
+            <div class="ion-text-center ion-padding">
+            <ion-spinner name="crescent"></ion-spinner>
+            </div>
+        } @else {
+            @if (!pedidos.length) {
+            <div class="ion-text-center ion-color-medium ion-padding">
+                No hay pedidos para este estado.
+            </div>
+            } @else {
+            <ion-list>
+                @for (p of pedidos; track p.id) {
+                <ion-card
+                    class="admin-pedido-card"
+                    (click)="seleccionarPedido(p)"
+                    [class.seleccionado]="pedidoSeleccionado?.id === p.id"
+                >
+                    <ion-card-header>
+                    <ion-card-title>
+                        <strong>Mesa {{ p.mesaNumero }}  -- #Pedido : {{ p.id }}</strong>
+                    </ion-card-title>
+                    <ion-card-subtitle>
+                        {{ p.createdAt | date:'shortTime' }}
+                    </ion-card-subtitle>
+                    </ion-card-header>
+
+                    <ion-card-content>
+                    <div class="admin-pedido-meta">
+                        <span>Total: {{ p.total | number:'1.2-2' }}</span>
+                        <span>Items: {{ p.items.length }}</span>
+                        <div class="admin-pedido-estados">
+                            <ion-badge color="primary">
+                            {{ p.estadoPedido }}
+                            </ion-badge>
+
+                            @if (p.facturadoTotal) {
+                            <ion-badge color="success">
+                                100% facturado
+                            </ion-badge>
+                            } @else if (p.facturadoParcial) {
+                            <ion-badge color="warning">
+                                Facturación parcial
+                            </ion-badge>
+                            }
+                        </div>
+                    </div>
+                    
+                    </ion-card-content>
+                </ion-card>
+                }
+            </ion-list>
+            }
+        }
+        </div>
+
+        <!-- DETALLE DERECHA -->
+        <div class="admin-pedidos-detalle">
+        <ion-card>
+            <ion-card-header>
+            @if (pedidoSeleccionado) {
+                <ion-card-title>
+                Detalle mesa {{ pedidoSeleccionado.mesaNumero }}
+                </ion-card-title>
+                <ion-card-subtitle>
+                {{ pedidoSeleccionado.createdAt | date:'short' }}
+                — Total: {{ pedidoSeleccionado.total | number:'1.2-2' }}
+                </ion-card-subtitle>
+            } @else {
+                <ion-card-title>Detalle del pedido</ion-card-title>
+                <ion-card-subtitle>
+                Selecciona un pedido de la lista para ver más información
+                </ion-card-subtitle>
+            }
+            </ion-card-header>
+
+            <ion-card-content>
+            @if (!pedidoSeleccionado) {
+                <ion-text color="medium">
+                No hay pedido seleccionado.
+                </ion-text>
+            } @else {
+                <ion-list>
+                @for (it of pedidoSeleccionado.items; track it.id) {
+                    <ion-item [class.extra]="it.isExtra">
+                    <ion-label>
+                        <div class="item-line">
+                        <span class="item-nombre">{{ it.nombre }}</span>
+                        <span class="item-cantidad">x{{ it.cantidad }}</span>
+                        </div>
+
+                        <div class="item-facturacion">
+                        <span>Facturado: {{ it.facturado }}</span>
+                        <span>Pendiente: {{ it.pendiente }}</span>
+                        </div>
+
+                        @if (it.nota) {
+                        <div class="item-nota">
+                            Nota: {{ it.nota }}
+                        </div>
+                        }
+                    </ion-label>
+                    </ion-item>
+                }
+                </ion-list>
+
+                <div class="detalle-footer-admin">
+                <div class="detalle-resumen">
+                    <span>Items: {{ pedidoSeleccionado.itemsCount }}</span>
+                    <span>Pendientes: {{ pedidoSeleccionado.itemsPendientes }}</span>
+                </div>
+
+                <!-- BOTÓN CANCELAR (solo en EN_PROCESO) -->
+                @if (puedeCancelar) {
+                    <ion-button
+                        expand="block"
+                        color="danger"
+                        fill="outline"
+                        (click)="cancelarPedidoSeleccionado()"
+                        [disabled]="cancelando || cargandoFacturacion"
+                        >
+                        Cancelar pedido
+                    </ion-button>
+                }
+
+
+                @if (puedeFacturar) {
+                    <div class="detalle-actions">
+                    <ion-button
+                        size="small"
+                        expand="block"
+                        color="success"
+                        (click)="facturarTodoPendiente()"
+                        [disabled]="cargandoFacturacion"
+                    >
+                        Facturar todo pendiente
+                    </ion-button>
+
+                    <ion-button
+                        size="small"
+                        expand="block"
+                        fill="outline"
+                        color="primary"
+                        (click)="abrirFacturacionParcial()"
+                        [disabled]="cargandoFacturacion"
+                    >
+                        Facturar parcial
+                    </ion-button>
+                    </div>
+                }
+
+                @if (cargandoFacturacion || cancelando) {
+                    <div class="detalle-loading">
+                    <ion-spinner name="crescent"></ion-spinner>
+                    </div>
+                }
+                </div>
+            }
+            </ion-card-content>
+        </ion-card>
+        </div>
+    </div>
+
+    <app-facturar-parcial-modal
+    [isOpen]="modalParcialOpen"
+    [items]="itemsParcial"
+    [mesaNumero]="pedidoSeleccionado?.mesaNumero ?? null"
+    [itemsPendientes]="pedidoSeleccionado?.itemsPendientes ?? null"
+    (close)="cerrarFacturacionParcial()"
+    (confirm)="onConfirmarParcial($event)"
+    ></app-facturar-parcial-modal>
+
 </ion-content>

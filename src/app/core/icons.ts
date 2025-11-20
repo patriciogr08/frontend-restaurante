@@ -37,6 +37,19 @@ import {
   refreshCircleOutline,
   archiveOutline,
   checkboxOutline,
+  addCircleOutline,
+  checkmarkCircle,
+  person,
+  playOutline,
+  trashBinOutline,
+  restaurantOutline,
+  peopleCircle,
+  peopleCircleOutline,
+  hourglass,
+  hourglassOutline,
+  swapHorizontal,
+  swapHorizontalOutline,
+  cartOutline,
 } from 'ionicons/icons';
 
 addIcons({
@@ -73,5 +86,10 @@ addIcons({
   // Chevrons
   chevronBackOutline, chevronForwardOutline, chevronDownOutline, chevronUpOutline,
 
-  gridOutline, refreshCircleOutline, archiveOutline, checkboxOutline 
+  gridOutline, refreshCircleOutline, archiveOutline, checkboxOutline ,
+
+  addCircleOutline, checkmarkCircle, person, playOutline, trashBinOutline,
+
+  restaurantOutline,peopleCircle, peopleCircleOutline,hourglass,hourglassOutline,
+  swapHorizontal,swapHorizontalOutline,cartOutline
 });

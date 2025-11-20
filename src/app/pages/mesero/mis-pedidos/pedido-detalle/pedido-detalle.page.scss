@@ -1,0 +1,189 @@
+ion-content {
+    --background: var(--ion-color-light);
+}
+
+.pedido-resumen {
+    margin: 10px;
+    border-radius: 18px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+
+    ion-card-title {
+        font-size: 1.05rem;
+        font-weight: 600;
+    }
+
+    ion-card-subtitle {
+        font-size: 0.85rem;
+    }
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+
+    ion-chip {
+        font-size: 0.7rem;
+    }
+}
+
+.resumen-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 0.8rem;
+
+    .resumen-col {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+
+        .label {
+        color: var(--ion-color-medium);
+        font-size: 0.75rem;
+        }
+
+        .value {
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+
+        &.total {
+            color: var(--ion-color-primary);
+        }
+        }
+    }
+}
+
+.badge-extra {
+    margin-left: 2px;
+    font-size: 0.65rem;
+}
+
+.fecha-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: var(--ion-color-medium);
+    margin-top: 4px;
+
+    ion-icon {
+        font-size: 0.9rem;
+    }
+}
+
+.items-list {
+    margin: 8px 8px 80px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.item-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--ion-color-primary-rgb), 0.1);
+
+    ion-icon {
+        font-size: 1.4rem;
+        color: var(--ion-color-primary);
+    }
+
+    &.extra {
+        background: rgba(var(--ion-color-tertiary-rgb), 0.15);
+
+        ion-icon {
+        color: var(--ion-color-tertiary);
+        }
+    }
+}
+
+ion-item {
+    --inner-padding-end: 6px;
+}
+
+.item-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    h2 {
+        font-size: 0.95rem;
+        font-weight: 600;
+    }
+}
+
+.badge-extra-label {
+    font-size: 0.65rem;
+}
+
+ion-label p {
+    font-size: 0.8rem;
+    margin-top: 2px;
+
+    &.notas {
+        font-style: italic;
+        color: var(--ion-color-medium);
+    }
+}
+
+.item-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    ion-button {
+        --padding-start: 0;
+        --padding-end: 0;
+    }
+}
+
+.footer-actions {
+    .footer-buttons {
+        display: flex;
+        gap: 8px;
+
+        ion-button {
+        font-size: 0.8rem;
+        }
+    }
+}
+
+.no-edit {
+    padding: 16px;
+    text-align: center;
+    color: var(--ion-color-medium);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+
+    ion-icon {
+        font-size: 1.6rem;
+    }
+}
+
+.empty-wrap {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--ion-color-medium);
+    padding: 16px;
+    text-align: center;
+
+    ion-icon {
+        font-size: 3rem;
+        margin-bottom: 6px;
+    }
+}

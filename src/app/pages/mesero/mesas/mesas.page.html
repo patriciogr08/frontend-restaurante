@@ -1,9 +1,86 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-title>Mesas</ion-title>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-title>Mesas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cargarMesas()">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <!-- TODO: grid/lista de mesas -->
+<ion-content fullscreen>
+  <ion-refresher slot="fixed" (ionRefresh)="cargarMesas($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  @if (mesas.length) {
+    <ion-grid fixed class="mesas-grid">
+      <ion-row>
+        @for (mesa of mesas; track mesa.id) {
+          <ion-col size="6">
+            <ion-card
+              class="mesa-card"
+              [ngClass]="mesa.ocupacion === 'OCUPADA' ? 'ocupada' : 'libre'"
+            >
+              <ion-card-header>
+                <div class="mesa-header">
+                  <div class="mesa-numero">
+                    <ion-icon name="grid-outline"></ion-icon>
+                    <span>Mesa {{ mesa.numero }}</span>
+                  </div>
+
+                  <ion-chip
+                    size="small"
+                    [color]="mesa.ocupacion === 'OCUPADA' ? 'warning' : 'success'"
+                  >
+                    <ion-icon
+                      [name]="mesa.ocupacion === 'OCUPADA' ? 'person' : 'checkmark-circle'"
+                    ></ion-icon>
+                    <ion-label>{{ mesa.ocupacion }}</ion-label>
+                  </ion-chip>
+                </div>
+              </ion-card-header>
+
+              <ion-card-content>
+                <div class="mesa-info">
+                  <div class="info-row">
+                    <ion-icon name="people-circle-outline"></ion-icon>
+                    <span>Capacidad: {{ mesa.capacidad }}</span>
+                  </div>
+                </div>
+
+                <div class="mesa-actions">
+                  @if (puedeAbrir(mesa)) {
+                    <ion-button size="small" expand="block" (click)="onAbrirMesa(mesa)">
+                      <ion-icon name="play-outline" slot="start"></ion-icon>
+                      Abrir
+                    </ion-button>
+                  }
+
+                  @if (puedeEntrar(mesa)) {
+                    <ion-button
+                      size="small"
+                      expand="block"
+                      fill="outline"
+                      color="primary"
+                      (click)="onEntrarMesa(mesa)"
+                    >
+                      <ion-icon name="log-in-outline" slot="start"></ion-icon>
+                      Entrar
+                    </ion-button>
+                  }
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        }
+      </ion-row>
+    </ion-grid>
+  } @else {
+    <div class="empty-wrap">
+      <ion-icon name="cube-outline"></ion-icon>
+      <p>No hay mesas configuradas.</p>
+    </div>
+  }
 </ion-content>

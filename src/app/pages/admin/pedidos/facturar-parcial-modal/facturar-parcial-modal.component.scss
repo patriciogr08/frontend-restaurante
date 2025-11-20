@@ -1,0 +1,99 @@
+:host {
+  display: block;
+}
+
+/* Modal */
+ion-modal {
+  --width: 420px;
+  --max-width: 95vw;
+  --height: auto;
+  --max-height: 80vh;
+  --border-radius: 18px;
+  --box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Card del encabezado */
+.modal-header-card {
+  margin-bottom: 10px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --background: linear-gradient(
+    135deg,
+    rgba(56, 128, 255, 0.08),
+    rgba(56, 128, 255, 0.02)
+  );
+
+  ion-card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  ion-card-subtitle {
+    font-size: 0.85rem;
+    color: var(--ion-color-medium);
+    margin-top: 2px;
+  }
+}
+
+/* Texto explicativo dentro del card */
+.admin-modal-text {
+  font-size: 0.85rem;
+  color: var(--ion-color-medium);
+  margin: 0;
+}
+
+/* Lista */
+.items-list {
+  margin-top: 4px;
+}
+
+/* Fila de ítem */
+.item-row {
+  --min-height: 48px;
+  font-size: 0.9rem;
+}
+
+/* Nombre del producto */
+.item-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.item-nombre {
+  font-weight: 500;
+}
+
+/* "Pendiente: X" debajo del nombre */
+.item-facturacion {
+  margin-top: 2px;
+  font-size: 0.8rem;
+  color: var(--ion-color-medium);
+}
+
+/* Input de cantidad a la derecha */
+.cantidad-input {
+  max-width: 70px;
+  text-align: right;
+  --padding-start: 4px;
+  --padding-end: 0;
+}
+
+/* Botón principal */
+.modal-actions {
+  margin-top: 14px;
+
+  ion-button {
+    --border-radius: 999px;
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+}
+
+/* Mensaje sin items */
+ion-text {
+  font-size: 0.9rem;
+}

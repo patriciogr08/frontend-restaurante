@@ -25,13 +25,16 @@ export class ProductsService {
   }
 
   // Productos
-  listProductos(params?: { estado?:Estado; tipo?:number }) {
+  listProductos(params?: { estado?: Estado; tipo?: number; q?: string }) {
     const qs = new URLSearchParams();
     if (params?.estado) qs.set('estado', params.estado);
     if (params?.tipo)   qs.set('tipo', String(params.tipo));
+    if (params?.q)      qs.set('q', params.q);
+
     const url = `/productos${qs.toString() ? '?' + qs.toString() : ''}`;
     return this.http.get<Producto[]>(url);
   }
+  
   createProducto(payload: {
     tipoProductoId:number; nombre:string; descripcion?:string|null; precio:number;
     tieneDescuento?:boolean; descuentoPorcentaje?:number; descuentoValor?:number;

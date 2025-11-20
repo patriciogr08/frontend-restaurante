@@ -1,0 +1,167 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+        <ion-back-button defaultHref="/mesero/mis-pedidos"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Detalle pedido</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+    <ion-refresher slot="fixed" (ionRefresh)="cargar($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    @if (pedido) {
+        <!-- Card resumen -->
+        <ion-card class="pedido-resumen">
+        <ion-card-header>
+            <div class="header-top">
+            <div>
+                <ion-card-title>Pedido #{{ pedido.id }}</ion-card-title>
+                <ion-card-subtitle>Mesa {{ pedido.mesaId }}</ion-card-subtitle>
+            </div>
+
+            <ion-chip
+                size="small"
+                [color]="editable ? 'warning' : 'medium'"
+            >
+                <ion-icon
+                [name]="editable ? 'time-outline' : 'lock-closed-outline'"
+                ></ion-icon>
+                <ion-label>{{ pedido.estado }}</ion-label>
+            </ion-chip>
+            </div>
+        </ion-card-header>
+
+        <ion-card-content>
+            <div class="resumen-row">
+            <div class="resumen-col">
+                <span class="label">Items</span>
+                <div class="value">
+                {{ itemCount }}
+                <ion-badge
+                    color="tertiary"
+                    *ngIf="extraCount > 0"
+                    class="badge-extra"
+                >
+                    {{ extraCount }} extra
+                    {{ extraCount > 1 ? 's' : '' }}
+                </ion-badge>
+                </div>
+            </div>
+
+            <div class="resumen-col">
+                <span class="label">Subtotal</span>
+                <span class="value">
+                {{ pedido.subtotal | number:'1.2-2' }}
+                </span>
+            </div>
+
+            <div class="resumen-col">
+                <span class="label">Total</span>
+                <span class="value total">
+                {{ pedido.total | number:'1.2-2' }}
+                </span>
+            </div>
+            </div>
+
+            <div class="fecha-row">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <span>{{ pedido.createdAt | date:'short' }}</span>
+            </div>
+        </ion-card-content>
+        </ion-card>
+
+        <!-- Lista de items -->
+        <ion-list class="items-list">
+        @for (it of pedido.items; track it.id) {
+            <ion-item lines="full">
+            <ion-avatar slot="start">
+                <div
+                class="item-avatar"
+                [class.extra]="it.isExtra"
+                >
+                <ion-icon
+                    [name]="it.isExtra ? 'add-circle-outline' : 'fast-food-outline'"
+                ></ion-icon>
+                </div>
+            </ion-avatar>
+
+            <ion-label>
+                <div class="item-header">
+                <h2>
+                    Producto {{ it.producto?.nombre }}
+                </h2>
+
+                @if (it.isExtra) {
+                    <ion-badge color="tertiary" class="badge-extra-label">
+                    Extra
+                    </ion-badge>
+                }
+                </div>
+
+                <p>
+                Cant: <b>{{ it.cantidad }}</b> ·
+                Precio: {{ it.precioUnitario | number:'1.2-2' }}
+                </p>
+
+                @if (it.notas) {
+                <p class="notas">"{{ it.notas }}"</p>
+                }
+            </ion-label>
+
+            @if (editable) {
+                <div class="item-actions" slot="end">
+                <ion-button fill="clear" size="small" (click)="editarItem(it)">
+                    <ion-icon name="create-outline"></ion-icon>
+                </ion-button>
+
+                <ion-button
+                    fill="clear"
+                    size="small"
+                    color="danger"
+                    (click)="eliminarItem(it)"
+                >
+                    <ion-icon name="trash-outline"></ion-icon>
+                </ion-button>
+                </div>
+            }
+            </ion-item>
+        }
+        </ion-list>
+
+        <!-- Footer acciones -->
+        @if (editable) {
+        <ion-footer class="footer-actions">
+            <ion-toolbar>
+            <div class="footer-buttons">
+                <ion-button expand="block" (click)="agregarExtra()">
+                <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+                Agregar extra
+                </ion-button>
+
+                <ion-button
+                expand="block"
+                color="medium"
+                (click)="transferirPedido()"
+                >
+                <ion-icon slot="start" name="swap-horizontal-outline"></ion-icon>
+                Transferir
+                </ion-button>
+            </div>
+            </ion-toolbar>
+        </ion-footer>
+        } @else {
+        <div class="no-edit">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+            <p>El pedido ya no es editable.</p>
+        </div>
+        }
+    } @else {
+        <div class="empty-wrap">
+        <ion-icon name="hourglass-outline"></ion-icon>
+        <p>Cargando pedido...</p>
+        </div>
+    }
+</ion-content>

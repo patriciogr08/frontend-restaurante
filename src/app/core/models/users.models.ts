@@ -14,3 +14,11 @@ export interface Usuario {
     createdAt: string;
     updatedAt?: string;
 }
+
+
+
+export interface UsuarioBasico {
+    id: number;
+    nombre: string;
+    email: string;
+}

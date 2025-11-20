@@ -1,0 +1,75 @@
+<ion-modal [isOpen]="isOpen" (didDismiss)="onDidDismiss()">
+    <ion-header>
+        <ion-toolbar>
+        <ion-title>Facturación parcial</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="onDidDismiss()">Cerrar</ion-button>
+        </ion-buttons>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+        <ng-container *ngIf="items && items.length > 0; else noItems">
+        <form [formGroup]="form">
+            <!-- HEADER CARD -->
+            <ion-card class="modal-header-card">
+            <ion-card-header>
+                <ion-card-title>
+                Mesa {{ mesaNumero }}
+                </ion-card-title>
+                <ion-card-subtitle>
+                Pendientes: {{ itemsPendientes }} ítem(s) por facturar
+                </ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+                <p class="admin-modal-text">
+                Ajusta la cantidad a facturar por cada ítem. No puedes exceder lo
+                pendiente.
+                </p>
+            </ion-card-content>
+            </ion-card>
+
+            <!-- LISTA DE ÍTEMS -->
+            <ion-list formArrayName="cantidades" class="items-list">
+            @for (it of items; track $index; let i = $index) {
+                <ion-item class="item-row">
+                <ion-label>
+                    <div class="item-line">
+                    <span class="item-nombre">{{ it.nombre }}</span>
+                    </div>
+                    <div class="item-facturacion">
+                    Pendiente: {{ it.pendiente }}
+                    </div>
+                </ion-label>
+
+                <ion-input
+                    slot="end"
+                    class="cantidad-input"
+                    type="number"
+                    min="0"
+                    [max]="it.pendiente"
+                    [formControlName]="i"
+                ></ion-input>
+                </ion-item>
+            }
+            </ion-list>
+
+            <div class="modal-actions">
+            <ion-button
+                expand="block"
+                color="success"
+                (click)="onConfirm()"
+            >
+                CONFIRMAR FACTURACIÓN PARCIAL
+            </ion-button>
+            </div>
+        </form>
+        </ng-container>
+
+        <ng-template #noItems>
+        <ion-text color="medium">
+            No hay ítems pendientes de facturar.
+        </ion-text>
+        </ng-template>
+    </ion-content>
+</ion-modal>

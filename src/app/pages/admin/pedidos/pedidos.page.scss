@@ -1,0 +1,148 @@
+.admin-pedidos-layout {
+  display: grid;
+  grid-template-columns: 2fr 1.4fr;
+  gap: 16px;
+  height: 100%;
+}
+
+.admin-pedidos-lista,
+.admin-pedidos-detalle {
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+/* Cards de la lista */
+.admin-pedido-card {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border-left: 4px solid var(--ion-color-medium);
+}
+
+.admin-pedido-card.seleccionado {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  border-left-color: var(--ion-color-primary);
+}
+
+.admin-pedido-card ion-card-header {
+  padding-bottom: 4px;
+}
+
+.admin-pedido-card ion-card-title {
+  font-size: 0.95rem;
+}
+
+.admin-pedido-card ion-card-subtitle {
+  font-size: 0.8rem;
+}
+
+/* Meta (total / items) */
+.admin-pedido-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+}
+
+/* Badges de estado */
+.admin-pedido-estados {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Detalle derecha */
+.admin-pedidos-detalle ion-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-pedidos-detalle ion-card-content {
+  flex: 1;
+  overflow: auto;
+}
+
+/* Items del detalle */
+.item-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-nombre {
+  font-weight: 500;
+}
+
+.item-cantidad {
+  font-weight: 500;
+}
+
+.item-nota {
+  margin-top: 4px;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--ion-color-medium);
+}
+
+ion-item.extra {
+  --background: rgba(255, 196, 0, 0.06);
+  border-left: 3px solid var(--ion-color-warning);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .admin-pedidos-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-pedidos-detalle {
+    margin-top: 12px;
+  }
+}
+
+
+.detalle-footer-admin {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detalle-resumen {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--ion-color-medium);
+}
+
+.detalle-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detalle-loading {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.item-facturacion {
+  margin-top: 2px;
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  color: var(--ion-color-medium);
+}
+
+/* Modal parcial */
+.modal-actions {
+  margin-top: 16px;
+}
+
+ion-item.extra {
+  --background: rgba(255, 196, 0, 0.06);
+  border-left: 3px solid var(--ion-color-warning);
+}
+

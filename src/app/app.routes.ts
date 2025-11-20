@@ -31,9 +31,29 @@ export const routes: Routes = [
             { path: 'mesas',        loadComponent: () => import('./pages/mesero/mesas/mesas.page').then(m => m.MesasPage) },
             { path: 'pedidos',      loadComponent: () => import('./pages/mesero/pedidos/pedidos.page').then(m => m.PedidosPage) },
             { path: 'mis-pedidos',  loadComponent: () => import('./pages/mesero/mis-pedidos/mis-pedidos.page').then(m => m.MisPedidosPage) },
+            { path: 'mis-pedidos/:id', loadComponent: () => import('./pages/mesero/mis-pedidos/pedido-detalle/pedido-detalle.page').then(m => m.PedidoDetallePage) }, // 👈 nuevo
             { path: 'perfil',       loadComponent: () => import('./shared/perfil/perfil.page').then(m => m.PerfilPage) },
             { path: '', pathMatch: 'full', redirectTo: 'mesas' }
         ]
     },
+    {
+    path: 'despachador',
+    canActivate: [AuthGuard, allowRolesGuard],
+    data: { roles: ['DESPACHADOR'] },
+    loadComponent: () => import('./pages/despachador/despachador-tabs.page').then(m => m.DespachadorTabsPage),
+    children: [
+        { 
+            path: 'pedidos', 
+            loadComponent: () => import('./pages/despachador/pedidos/pedidos.page')
+            .then(m => m.DespachadorPedidosPage) 
+        },
+        { 
+            path: 'perfil', 
+            loadComponent: () => import('./shared/perfil/perfil.page').then(m => m.PerfilPage) 
+        },
+        { path: '', pathMatch: 'full', redirectTo: 'pedidos' }
+    ]
+  },
+
     { path: '', pathMatch: 'full', redirectTo: 'login' }
 ];

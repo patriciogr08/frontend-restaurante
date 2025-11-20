@@ -46,7 +46,8 @@ export class ProductosPage {
         const f = this.filters.getRawValue();
         this.svc.listProductos({
         estado: (f.estado || '') as Estado || undefined,
-        tipo: f.tipo ? Number(f.tipo) : undefined
+        tipo: f.tipo ? Number(f.tipo) : undefined,
+        q: f.q || undefined
         }).subscribe({
         next: (rows) => {
             const q = (this.filters.value.q || '').toLowerCase();

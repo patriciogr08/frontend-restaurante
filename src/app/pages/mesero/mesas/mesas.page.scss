@@ -1,0 +1,108 @@
+ion-content {
+    --background: var(--ion-color-light);
+}
+
+.mesas-grid {
+    padding: 12px;
+}
+
+.mesa-card {
+    border-radius: 18px;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    transition: transform 120ms ease, box-shadow 120ms ease;
+    margin-bottom: 12px;
+
+    ion-card-header {
+        padding-bottom: 4px;
+    }
+
+    ion-card-content {
+        padding-top: 4px;
+    }
+
+    &.libre {
+        border: 1px solid rgba(var(--ion-color-success-rgb), 0.4);
+        background: linear-gradient(
+        135deg,
+        rgba(var(--ion-color-success-rgb), 0.08),
+        #ffffff
+        );
+    }
+
+    &.ocupada {
+        border: 1px solid rgba(var(--ion-color-warning-rgb), 0.4);
+        background: linear-gradient(
+        135deg,
+        rgba(var(--ion-color-warning-rgb), 0.08),
+        #ffffff
+        );
+    }
+
+    &:active {
+        transform: translateY(1px);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    }
+}
+
+.mesa-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+
+    .mesa-numero {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 600;
+        font-size: 1rem;
+
+        ion-icon {
+        font-size: 1.2rem;
+        }
+    }
+
+    ion-chip {
+        font-size: 0.7rem;
+    }
+}
+
+.mesa-info {
+    margin-top: 4px;
+
+    .info-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.85rem;
+        color: var(--ion-color-medium);
+
+        ion-icon {
+        font-size: 1rem;
+        }
+    }
+}
+
+.mesa-actions {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.empty-wrap {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--ion-color-medium);
+
+    ion-icon {
+        font-size: 3rem;
+        margin-bottom: 8px;
+    }
+}
