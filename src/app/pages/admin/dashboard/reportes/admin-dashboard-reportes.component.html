@@ -1,0 +1,26 @@
+<ion-card>
+    <ion-card-content>
+        <ion-segment [value]="tipo" (ionChange)="changeTipo($any($event.detail.value))">
+            <ion-segment-button value="ventas">
+                <ion-label>Ventas</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="productos">
+                <ion-label>Productos</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="meseros">
+                <ion-label>Meseros</ion-label>
+            </ion-segment-button>
+        </ion-segment>
+    </ion-card-content>
+</ion-card>
+
+<!-- CONTENIDO DEL REPORTE SELECCIONADO -->
+<div class="reportes-contenido">
+    @if (tipo === 'ventas') {
+        <app-reporte-ventas />
+    } @else if (tipo === 'productos') {
+        <app-reporte-productos />
+    } @else if (tipo === 'meseros') {
+        <app-reporte-meseros />
+    }
+</div>

@@ -1,0 +1,100 @@
+<ion-card>
+    <ion-card-header>
+        <ion-card-title>Reporte por mesero</ion-card-title>
+        <ion-card-subtitle>Rendimiento por mesero</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+        <!-- FILTROS -->
+        <div class="report-filters">
+        <div class="filter-row">
+            <label>
+            Desde:
+            <input type="date" [value]="desde" (change)="onDesdeChange($event)" />
+            </label>
+
+            <label>
+            Hasta:
+            <input type="date" [value]="hasta" (change)="onHastaChange($event)" />
+            </label>
+
+            <label>
+            Mesero:
+            <!-- TODO: reemplazar por select real cargado del backend -->
+            <select [(ngModel)]="meseroId">
+                <option value="TODOS">Todos</option>
+            </select>
+            </label>
+
+            <ion-button size="small" (click)="buscar()">
+            Buscar
+            </ion-button>
+
+            <ion-button
+            size="small"
+            fill="outline"
+            color="success"
+            (click)="descargarExcel()"
+            [disabled]="!rows.length"
+            >
+            Descargar Excel
+            </ion-button>
+        </div>
+        </div>
+
+        @if (loading) {
+        <div class="ion-text-center ion-padding">
+            <ion-spinner name="crescent"></ion-spinner>
+        </div>
+        }
+
+        @if (!loading && data) {
+        <div class="report-resumen">
+            <ion-chip color="primary" outline="true">
+            <ion-label>
+                Rango: {{ data.fechaDesde }} → {{ data.fechaHasta }}
+            </ion-label>
+            </ion-chip>
+        </div>
+        }
+
+        @if (!loading && rows.length) {
+        <div class="report-table-wrapper">
+            <table class="report-table">
+            <thead>
+                <tr>
+                <th class="ion-text-center">Mesero</th>
+                <th class="ion-text-center">Pedidos</th>
+                <th class="ion-text-center">Total facturado</th>
+                <th class="ion-text-center">Propina</th>
+                <th class="ion-text-center">Ticket promedio</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (r of rows; track r.meseroId) {
+                <tr>
+                    <td>{{ r.meseroNombre }}</td>
+                    <td>{{ r.cantidadPedidos }}</td>
+                    <td class="ion-text-center">
+                    $ {{ r.totalFacturado | number:'1.2-2' }}
+                    </td>
+                    <td class="ion-text-center">
+                    $ {{ r.totalPropina | number:'1.2-2' }}
+                    </td>
+                    <td class="ion-text-center">
+                    $ {{ r.ticketPromedio | number:'1.2-2' }}
+                    </td>
+                </tr>
+                }
+            </tbody>
+            </table>
+        </div>
+        }
+
+        @if (!loading && !rows.length && data) {
+        <div class="ion-text-center ion-padding ion-color-medium">
+            No se encontraron datos de meseros en el rango seleccionado.
+        </div>
+        }
+    </ion-card-content>
+</ion-card>

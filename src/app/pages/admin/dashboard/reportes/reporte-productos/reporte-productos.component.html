@@ -1,0 +1,107 @@
+<ion-card>
+    <ion-card-header>
+        <ion-card-title>Reporte de productos</ion-card-title>
+        <ion-card-subtitle>Top productos por rango de fechas</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+        <!-- FILTROS -->
+        <div class="report-filters">
+        <div class="filter-row">
+            <label>
+            Desde:
+            <input type="date" [value]="desde" (change)="onDesdeChange($event)" />
+            </label>
+
+            <label>
+            Hasta:
+            <input type="date" [value]="hasta" (change)="onHastaChange($event)" />
+            </label>
+
+            <label>
+            Categoría:
+            <!-- TODO: reemplazar por un select real de categorías -->
+            <select [(ngModel)]="categoriaId">
+                <option value="TODAS">Todas</option>
+            </select>
+            </label>
+
+            <ion-button size="small" (click)="buscar()">
+            Buscar
+            </ion-button>
+
+            <ion-button
+            size="small"
+            fill="outline"
+            color="success"
+            (click)="descargarExcel()"
+            [disabled]="!rows.length"
+            >
+            Descargar Excel
+            </ion-button>
+        </div>
+        </div>
+
+        @if (loading) {
+        <div class="ion-text-center ion-padding">
+            <ion-spinner name="crescent"></ion-spinner>
+        </div>
+        }
+
+        @if (!loading && data) {
+        <div class="report-resumen">
+            <ion-chip color="primary" outline="true">
+                <ion-label>
+                    Rango: {{ data.fechaDesde }} → {{ data.fechaHasta }}
+                </ion-label>
+            </ion-chip>
+
+            <div class="kpis">
+            <div class="kpi-item">
+                <span class="kpi-label">Cant. total</span>
+                <span class="kpi-value">{{ data.totalCantidad }}</span>
+            </div>
+            <div class="kpi-item">
+                <span class="kpi-label">Monto total</span>
+                <span class="kpi-value">
+                $ {{ data.totalMonto | number:'1.2-2' }}
+                </span>
+            </div>
+            </div>
+        </div>
+        }
+
+        @if (!loading && rows.length) {
+        <div class="report-table-wrapper">
+            <table class="report-table">
+            <thead>
+                <tr>
+                <th class="ion-text-center" >Producto</th>
+                <th class="ion-text-center" >Categoría</th>
+                <th class="ion-text-center" >Cantidad</th>
+                <th class="ion-text-center" >Total vendido</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (r of rows; track r.productoId) {
+                <tr>
+                    <td>{{ r.nombre }}</td>
+                    <td>{{ r.categoriaNombre ?? '-' }}</td>
+                    <td class="ion-text-center" >{{ r.cantidadVendida }}</td>
+                    <td class="ion-text-center" >
+                    $ {{ r.totalVendido | number:'1.2-2' }}
+                    </td>
+                </tr>
+                }
+            </tbody>
+            </table>
+        </div>
+        }
+
+        @if (!loading && !rows.length && data) {
+        <div class="ion-text-center ion-padding ion-color-medium">
+            No se encontraron ventas de productos en el rango seleccionado.
+        </div>
+        }
+    </ion-card-content>
+</ion-card>

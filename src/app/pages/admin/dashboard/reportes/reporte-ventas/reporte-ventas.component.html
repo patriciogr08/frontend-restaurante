@@ -1,0 +1,129 @@
+<ion-card>
+    <ion-card-header>
+        <ion-card-title>Reporte de ventas</ion-card-title>
+        <ion-card-subtitle>Facturas por rango de fechas</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+        <!-- FILTROS -->
+        <div class="report-filters">
+            <div class="filter-row">
+                <label>
+                Desde:
+                <input type="date" [value]="desde" (change)="onDesdeChange($event)" />
+                </label>
+
+                <label>
+                Hasta:
+                <input type="date" [value]="hasta" (change)="onHastaChange($event)" />
+                </label>
+
+                <label>
+                Método pago:
+                <select [(ngModel)]="metodoPago">
+                    <option value="TODOS">Todos</option>
+                    <option value="EFECTIVO">Efectivo</option>
+                    <option value="TRANSFERENCIA">Transferencia</option>
+                </select>
+                </label>
+
+                <ion-button size="small" (click)="buscar()">
+                Buscar
+                </ion-button>
+
+                <ion-button
+                    size="small"
+                    fill="outline"
+                    color="success"
+                    (click)="descargarExcel()"
+                    [disabled]="!rows.length" >
+                    Descargar Excel
+                </ion-button>
+            </div>
+        </div>
+
+        <!-- LOADING -->
+        @if (loading) {
+        <div class="ion-text-center ion-padding">
+            <ion-spinner name="crescent"></ion-spinner>
+        </div>
+        }
+
+        <!-- RESUMEN -->
+        @if (!loading && data) {
+        <div class="report-resumen">
+            <ion-chip color="primary" outline="true">
+            <ion-label>
+                Rango: {{ data.fechaDesde }}
+                <ng-container *ngIf="data.fechaDesde !== data.fechaHasta">
+                &nbsp;→&nbsp; {{ data.fechaHasta }}
+                </ng-container>
+            </ion-label>
+            </ion-chip>
+
+            <div class="kpis">
+            <div class="kpi-item">
+                <span class="kpi-label">Total facturado</span>
+                <span class="kpi-value">$ {{ data.totalFacturado | number: '1.2-2' }}</span>
+            </div>
+            <div class="kpi-item">
+                <span class="kpi-label">Total propina</span>
+                <span class="kpi-value">$ {{ data.totalPropina | number: '1.2-2' }}</span>
+            </div>
+            <div class="kpi-item">
+                <span class="kpi-label">Facturas</span>
+                <span class="kpi-value">{{ data.totalFacturas }}</span>
+            </div>
+            <div class="kpi-item">
+                <span class="kpi-label">Ticket promedio</span>
+                <span class="kpi-value">$ {{ data.ticketPromedio | number: '1.2-2' }}</span>
+            </div>
+            </div>
+        </div>
+        }
+
+        <!-- TABLA -->
+        @if (!loading && rows.length) {
+        <div class="report-table-wrapper">
+            <table class="report-table">
+            <thead>
+                <tr>
+                <th>Factura</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Mesa</th>
+                <th>Mesero</th>
+                <th>Método</th>
+                <th>Total</th>
+                <th>Propina</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (r of rows; track r.facturaId) {
+                <tr>
+                    <td>{{ r.numero }}</td>
+                    <td>{{ r.fecha }}</td>
+                    <td>{{ r.hora }}</td>
+                    <td>{{ r.mesaNumero ?? '-' }}</td>
+                    <td>{{ r.meseroNombre ?? '-' }}</td>
+                    <td>
+                    <ion-badge [color]="r.metodoPago === 'EFECTIVO' ? 'tertiary' : 'medium'">
+                        {{ r.metodoPago }}
+                    </ion-badge>
+                    </td>
+                    <td class="text-right">$ {{ r.total | number: '1.2-2' }}</td>
+                    <td class="text-right">$ {{ r.propina | number: '1.2-2' }}</td>
+                </tr>
+                }
+            </tbody>
+            </table>
+        </div>
+        }
+
+        @if (!loading && !rows.length && data) {
+        <div class="ion-text-center ion-padding ion-color-medium">
+            No se encontraron ventas en el rango seleccionado.
+        </div>
+        }
+    </ion-card-content>
+</ion-card>

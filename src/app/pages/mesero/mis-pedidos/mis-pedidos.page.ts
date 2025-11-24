@@ -10,17 +10,17 @@ import { firstValueFrom } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { EstadoPedidoChipComponent } from 'src/app/shared/estado-pedido-chip/estado-pedido-chip.component';
 
 type EstadoFiltro = 'EN_PROCESO' | 'DESPACHADO' | 'TODOS';
 
-type EstadoPedido = 'EN_PROCESO' | 'DESPACHADO' | 'COBRADO' | 'CANCELADO';
 
 @Component({
   standalone: true,
   selector: 'app-mis-pedidos',
   templateUrl: './mis-pedidos.page.html',
   styleUrls: ['./mis-pedidos.page.scss'],
-  imports: [CommonModule, IonicModule],
+  imports: [CommonModule, IonicModule, EstadoPedidoChipComponent],
 })
 export class MisPedidosPage implements OnInit, OnDestroy {
   private meseroSrv = inject(MeseroService);
@@ -117,37 +117,4 @@ export class MisPedidosPage implements OnInit, OnDestroy {
     this.router.navigate(['/mesero/mis-pedidos', p.id]);
   }
 
-  readonly estadoChipConfig: Record<
-    EstadoPedido,
-    { color: string; icon: string; label: string }
-  > = {
-    EN_PROCESO: {
-      color: 'primary',
-      icon: 'time-outline',
-      label: 'En proceso',
-    },
-    DESPACHADO: {
-      color: 'tertiary',
-      icon: 'restaurant-outline', // o 'cube-outline'
-      label: 'Despachado',
-    },
-    COBRADO: {
-      color: 'success',
-      icon: 'cash-outline', // o 'checkmark-done-outline'
-      label: 'Cobrado',
-    },
-    CANCELADO: {
-      color: 'danger',
-      icon: 'close-circle-outline',
-      label: 'Cancelado',
-    },
-  };
-
-  getEstadoConfig(estado: string) {
-    return this.estadoChipConfig[estado as EstadoPedido] ?? {
-      color: 'medium',
-      icon: 'help-circle-outline',
-      label: estado,
-    };
-  }
 }

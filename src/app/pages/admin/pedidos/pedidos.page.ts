@@ -30,6 +30,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { AdminPedidosService } from 'src/app/core/services/admin-pedidos.service';
 import { AdminPedidoDTO } from 'src/app/core/models/facturar.models';
 import { FacturarParcialModalComponent, ItemPendienteDTO } from './facturar-parcial-modal/facturar-parcial-modal.component';
+import { EstadoPedidoChipComponent } from 'src/app/shared/estado-pedido-chip/estado-pedido-chip.component';
 
 
 export type Estado = 'en_proceso' | 'despachados' | 'cobrados' | 'cancelados';
@@ -67,6 +68,7 @@ type FacturarPedidoBody = {
     IonButton,
     // componente modal
     FacturarParcialModalComponent,
+    EstadoPedidoChipComponent
   ],
   templateUrl: './pedidos.page.html',
   styleUrls: ['./pedidos.page.scss'],

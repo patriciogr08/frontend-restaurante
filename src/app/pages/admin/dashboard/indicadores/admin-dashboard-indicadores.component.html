@@ -1,0 +1,274 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+    @if (loading) {
+        <div class="loading-center">
+        <ion-spinner name="crescent"></ion-spinner>
+        </div>
+    } @else if (!data) {
+        <ion-text color="medium">No se pudo cargar el dashboard.</ion-text>
+    } @else {
+        <!-- FECHA -->
+        <div class="dashboard-filters">
+            <div class="filters-buttons">
+                <ion-button
+                size="small"
+                fill="{{ modoRango === 'HOY' ? 'solid' : 'outline' }}"
+                (click)="loadDashboardHoy()"
+                >
+                Hoy
+                </ion-button>
+
+                <ion-button
+                size="small"
+                fill="{{ modoRango === 'ULT7' ? 'solid' : 'outline' }}"
+                (click)="loadDashboardUltimos7()"
+                >
+                Últimos 7 días
+                </ion-button>
+            </div>
+
+            <div class="filters-range">
+                <label>
+                Desde:
+                <input
+                    type="date"
+                    [value]="desdeSeleccionado || ''"
+                    (change)="onDesdeChange($event)"
+                />
+                </label>
+
+                <label>
+                Hasta:
+                <input
+                    type="date"
+                    [value]="hastaSeleccionado || ''"
+                    (change)="onHastaChange($event)"
+                />
+                </label>
+
+
+                <ion-button size="small" (click)="aplicarRangoPersonalizado()">
+                Aplicar
+                </ion-button>
+            </div>
+
+            <div class="dashboard-date">
+                <ion-chip color="primary" outline="true">
+                <ion-label>
+                    {{ data?.fechaDesde }}
+                    <ng-container *ngIf="data?.fechaDesde !== data?.fechaHasta">
+                        &nbsp;→&nbsp; {{ data?.fechaHasta }}
+                    </ng-container>
+                </ion-label>
+                </ion-chip>
+            </div>
+        </div>
+
+
+        <!-- FILA 1: KPIs -->
+        <div class="kpi-grid">
+        <ion-card class="kpi-card">
+            <ion-card-header>
+            <ion-card-subtitle>Ventas del día</ion-card-subtitle>
+            <ion-card-title>{{ kpis?.totalVentasDia | number : '1.2-2' }}</ion-card-title>
+            </ion-card-header>
+        </ion-card>
+
+        <ion-card class="kpi-card">
+            <ion-card-header>
+            <ion-card-subtitle>Pedidos hoy</ion-card-subtitle>
+            <ion-card-title>{{ kpis?.totalPedidosDia }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+            <div class="kpi-badges">
+                <ion-badge color="primary">En proceso: {{ kpis?.pedidosEnProceso }}</ion-badge>
+                <ion-badge color="tertiary">Despachados: {{ kpis?.pedidosDespachados }}</ion-badge>
+                <ion-badge color="success">Cobrados: {{ kpis?.pedidosCobrados }}</ion-badge>
+                <ion-badge color="medium">Cancelados: {{ kpis?.pedidosCancelados }}</ion-badge>
+            </div>
+            </ion-card-content>
+        </ion-card>
+
+        <ion-card class="kpi-card">
+            <ion-card-header>
+            <ion-card-subtitle>Ticket promedio</ion-card-subtitle>
+            <ion-card-title>{{ kpis?.ticketPromedio | number : '1.2-2' }}</ion-card-title>
+            </ion-card-header>
+        </ion-card>
+
+        <ion-card class="kpi-card">
+            <ion-card-header>
+            <ion-card-subtitle>Ocupación mesas</ion-card-subtitle>
+            <ion-card-title>
+                {{ kpis?.mesasOcupadas }}/{{ (kpis?.mesasOcupadas || 0) + (kpis?.mesasLibres || 0) }}
+            </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+            <div class="kpi-badges">
+                <ion-badge color="success">Libres: {{ kpis?.mesasLibres }}</ion-badge>
+                <ion-badge color="danger">Ocupadas: {{ kpis?.mesasOcupadas }}</ion-badge>
+            </div>
+            </ion-card-content>
+        </ion-card>
+
+        <ion-card class="kpi-card">
+            <ion-card-header>
+            <ion-card-subtitle>Tiempo prep. promedio</ion-card-subtitle>
+            <ion-card-title>
+                @if (kpis?.tiempoPromedioPreparacionMin != null) {
+                {{ kpis?.tiempoPromedioPreparacionMin | number : '1.0-0' }} min
+                } @else {
+                N/D
+                }
+            </ion-card-title>
+            </ion-card-header>
+        </ion-card>
+
+        <ion-card class="kpi-card">
+            <ion-card-header>
+            <ion-card-subtitle>Propina total</ion-card-subtitle>
+            <ion-card-title>{{ data.propinaTotal | number : '1.2-2' }}</ion-card-title>
+            </ion-card-header>
+        </ion-card>
+        </div>
+
+        <!-- FILA 2: VENTAS POR HORA / TOP PRODUCTOS -->
+        <div class="row-2">
+        <ion-card class="chart-card">
+            <ion-card-header>
+            <ion-card-title>Ventas por hora</ion-card-title>
+            <ion-card-subtitle>Facturas emitidas hoy</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+            @if (!ventasPorHora.length) {
+                <ion-text color="medium">Sin ventas registradas.</ion-text>
+            } @else {
+                <div class="bar-list">
+                @for (v of ventasPorHora; track v.hora) {
+                    <div class="bar-item">
+                    <span class="bar-label">{{ v.hora }}</span>
+                    <div class="bar-track">
+                        <div
+                        class="bar-fill"
+                        [style.width.%]="maxVentasHora() ? (v.total / maxVentasHora()) * 100 : 0"
+                        ></div>
+                    </div>
+                    <span class="bar-value">{{ v.total | number : '1.2-2' }}</span>
+                    </div>
+                }
+                </div>
+            }
+            </ion-card-content>
+        </ion-card>
+
+        <ion-card class="chart-card">
+            <ion-card-header>
+            <ion-card-title>Top productos</ion-card-title>
+            <ion-card-subtitle>Más vendidos hoy</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+            @if (!topProductos.length) {
+                <ion-text color="medium">Sin productos vendidos.</ion-text>
+            } @else {
+                <div class="bar-list">
+                @for (t of topProductos; track t.productoId) {
+                    <div class="bar-item">
+                    <span class="bar-label">{{ t.nombre }}</span>
+                    <div class="bar-track">
+                        <div
+                        class="bar-fill bar-fill-secondary"
+                        [style.width.%]="maxTopProductos() ? (t.cantidad / maxTopProductos()) * 100 : 0"
+                        ></div>
+                    </div>
+                    <span class="bar-value">x{{ t.cantidad }}</span>
+                    </div>
+                }
+                </div>
+            }
+            </ion-card-content>
+        </ion-card>
+        </div>
+
+        <!-- FILA 3: DEMORADOS / ULTIMOS COBRADOS -->
+        <div class="row-2">
+        <ion-card class="list-card">
+            <ion-card-header>
+            <ion-card-title>Pedidos demorados</ion-card-title>
+            <ion-card-subtitle>En proceso &gt;= 20 min</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+            @if (!pedidosDemorados.length) {
+                <ion-text color="medium">No hay pedidos demorados.</ion-text>
+            } @else {
+                <ion-list>
+                @for (p of pedidosDemorados; track p.id) {
+                    <ion-item>
+                    <ion-label>
+                        <div class="item-line">
+                        <span>Pedido #{{ p.id }} — Mesa {{ p.mesaNumero }}</span>
+                        <ion-badge color="danger">{{ p.minutosEnProceso }} min</ion-badge>
+                        </div>
+                        <div class="item-sub">
+                        <span>Mesero: {{ p.meseroNombre || 'N/A' }}</span>
+                        <span>Total: {{ p.total | number : '1.2-2' }}</span>
+                        </div>
+                    </ion-label>
+                    </ion-item>
+                }
+                </ion-list>
+            }
+            </ion-card-content>
+        </ion-card>
+
+        <ion-card class="list-card">
+            <ion-card-header>
+            <ion-card-title>Últimos cobrados</ion-card-title>
+            <ion-card-subtitle>Pedidos cobrados hoy</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+            @if (!ultimosCobrados.length) {
+                <ion-text color="medium">No hay pedidos cobrados aún.</ion-text>
+            } @else {
+                <ion-list>
+                @for (p of ultimosCobrados; track p.id) {
+                    <ion-item>
+                    <ion-label>
+                        <div class="item-line">
+                        <span>Pedido #{{ p.id }} — Mesa {{ p.mesaNumero }}</span>
+                        <span>{{ p.cobradoAt | date : 'shortTime' }}</span>
+                        </div>
+                        <div class="item-sub">
+                        <span>Total: {{ p.total | number : '1.2-2' }}</span>
+                        </div>
+                    </ion-label>
+                    </ion-item>
+                }
+                </ion-list>
+            }
+            </ion-card-content>
+        </ion-card>
+        </div>
+
+        <!-- FILA 4: Métodos de pago -->
+        <ion-card>
+        <ion-card-header>
+            <ion-card-title>Métodos de pago</ion-card-title>
+            <ion-card-subtitle>Distribución del día</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+            @if (!metodosPago.length) {
+            <ion-text color="medium">Sin facturas emitidas.</ion-text>
+            } @else {
+            <div class="metodos-pago">
+                @for (m of metodosPago; track m.metodo) {
+                <ion-chip>
+                    <ion-label>
+                    {{ m.metodo }} — {{ m.total | number : '1.2-2' }}
+                    </ion-label>
+                </ion-chip>
+                }
+            </div>
+            }
+        </ion-card-content>
+        </ion-card>
+    }
+</ion-content>

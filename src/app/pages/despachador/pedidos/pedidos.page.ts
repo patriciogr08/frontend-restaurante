@@ -8,13 +8,14 @@ import { DespachadorPedidosService } from 'src/app/core/services/despachador-ped
 import { AuthService } from 'src/app/core/services/auth.service';
 import { environment } from 'src/environments/environment';
 import { io, Socket } from 'socket.io-client';
+import { EstadoPedidoChipComponent } from 'src/app/shared/estado-pedido-chip/estado-pedido-chip.component';
 
 @Component({
   standalone: true,
   selector: 'app-despachador-pedidos',
   templateUrl: './pedidos.page.html',
   styleUrls: ['./pedidos.page.scss'],
-  imports: [IonicModule, CommonModule, RouterModule]
+  imports: [IonicModule, CommonModule, RouterModule, EstadoPedidoChipComponent]
 })
 export class DespachadorPedidosPage implements OnInit, OnDestroy {
 

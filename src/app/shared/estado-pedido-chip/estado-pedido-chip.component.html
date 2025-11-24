@@ -1,0 +1,12 @@
+<ion-chip
+    [color]="config.color"
+    [ngClass]="['estado-chip', size]"
+    [outline]="estado === 'CANCELADO'"
+    >
+    <ion-icon [name]="config.icon"></ion-icon>
+    @if(showLabel){
+        <ion-label>
+            {{ config.label }}
+        </ion-label>
+    }
+</ion-chip>

@@ -119,3 +119,29 @@ ion-item.extra {
   flex-direction: column;
 }
 
+.card-header-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+
+  ion-card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+}
+.title-with-chip {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+
+  span {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+}
+
+
+
+

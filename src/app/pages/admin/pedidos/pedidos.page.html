@@ -57,10 +57,10 @@
                         <span>Total: {{ p.total | number:'1.2-2' }}</span>
                         <span>Items: {{ p.items.length }}</span>
                         <div class="admin-pedido-estados">
-                            <ion-badge color="primary">
-                            {{ p.estadoPedido }}
-                            </ion-badge>
-
+                            <app-estado-pedido-chip
+                            [estado]="p.estadoPedido"
+                            size="small"
+                            ></app-estado-pedido-chip>
                             @if (p.facturadoTotal) {
                             <ion-badge color="success">
                                 100% facturado
@@ -189,12 +189,12 @@
     </div>
 
     <app-facturar-parcial-modal
-    [isOpen]="modalParcialOpen"
-    [items]="itemsParcial"
-    [mesaNumero]="pedidoSeleccionado?.mesaNumero ?? null"
-    [itemsPendientes]="pedidoSeleccionado?.itemsPendientes ?? null"
-    (close)="cerrarFacturacionParcial()"
-    (confirm)="onConfirmarParcial($event)"
+        [isOpen]="modalParcialOpen"
+        [items]="itemsParcial"
+        [mesaNumero]="pedidoSeleccionado?.mesaNumero ?? null"
+        [itemsPendientes]="pedidoSeleccionado?.itemsPendientes ?? null"
+        (close)="cerrarFacturacionParcial()"
+        (confirm)="onConfirmarParcial($event)"
     ></app-facturar-parcial-modal>
 
 </ion-content>
